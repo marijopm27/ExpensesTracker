@@ -10,25 +10,56 @@
 
 <body>
   <h1>Monthly Expenses Tracker</h1>
-  <script src="scriptS.js"></script>
+  
+  <div class="section">
+    <div class="container">
+      
+        <div class="budget">
+          <h2>Add Budget</h2>
+          <h3>Budget:</h3>
+          <input type="text" id="budget-amount" placeholder="Enter Budget">
+          <h3>Currency:</h3>
+          <input type="text" id="Currency" placeholder="Enter Currency ">
+          <button class="submit-budget" id="budget-submit-button">Set Budget Amount</button>
+        </div>
+      
+        <div class="category">
+          <h2>Add Category</h2>
+          <h3>Category:</h3>
+          <input type="text" id="category-name" placeholder="Enter Category">
+          <button class="submit-" id="category-submit-button">Set Category</button>
+        </div>
 
-  <h2>Add Budget</h2>
-  <h3>Budget:</h3>
-  <input type="text">
-  <input type="button" value="Add">
+        <div class="expense">
+          <h2>Add Expense</h2>
+          <h3>Expense:</h3>
 
-  <h2>Add Category</h2>
-  <h3>Category:</h3>
-  <input type="text">
-  <input type="button" value="Add">
+          <input type="text" id="expense-amount" placeholder="Enter Expense">
+          <button class="submit-" id="expense-submit-button">Set Expense Amount</button>
+        </div>
+      
+    </div>
+      <!-- Expenses List -->
+      <div class="expenses-list">
+        <h3>Expenses of the Month</h3>
+        <div class="expenses-list-container" id="list">
+          <table>
+            <thead>
+              <tr>
+                <th>Expense Name</th>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
 
-  <h2>Add Expense</h2>
-  <h3>Expense:</h3>
-  <input type="text">
-  <input type="button" value="Add">
+    
+  </div>
 
-
-
+  <script src="script.js"></script>
 </body>
 
 </html>

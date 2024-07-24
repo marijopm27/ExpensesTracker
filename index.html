@@ -13,43 +13,57 @@
   
   <div class="section">
     <div class="container">
-      
+      <div class="sub-container">
         <div class="budget">
           <h2>Add Budget</h2>
-          <h3>Budget:</h3>
+          <div class="col-25">
+            <label>Budget:</label>
+          </div>
           <input type="text" id="budget-amount" placeholder="Enter Budget">
-          <h3>Currency:</h3>
+          <label>Currency:</label>
           <input type="text" id="Currency" placeholder="Enter Currency ">
           <button class="submit-budget" id="budget-submit-button">Set Budget Amount</button>
         </div>
       
         <div class="category">
           <h2>Add Category</h2>
-          <h3>Category:</h3>
+          <label>Category:</label>
           <input type="text" id="category-name" placeholder="Enter Category">
           <button class="submit-" id="category-submit-button">Set Category</button>
         </div>
 
         <div class="expense">
           <h2>Add Expense</h2>
-          <h3>Expense:</h3>
-
+          <label>Expense:</label>
+          
           <input type="text" id="expense-amount" placeholder="Enter Expense">
+          <label>Select Category</label>
+          <select id="category-name">
+            <option value="Default">Default</option>
+          </select>
+        
           <button class="submit-" id="expense-submit-button">Set Expense Amount</button>
         </div>
-      
+      </div>
     </div>
-      <!-- Expenses List -->
-      <div class="expenses-list">
+      <!-- Expenses table -->
+      <div class="expenses-table">
         <h3>Expenses of the Month</h3>
-        <div class="expenses-list-container" id="list">
+        <div class="important-amounts-labels">
+          <h3>Total Budget</h3>
+          <h3>Total Expenses</h3>
+          <h3>Budget Left</h3>
+        </div>
+        <div class="important-amounts">
+          <p id="total-budget">----</p>
+          <p id="total-expenses">----</p>
+          <p id="budget-left">----</p>
+        </div>
+        <div class="expenses-list-container" id="table">
           <table>
             <thead>
               <tr>
-                <th>Expense Name</th>
-                <th>Category</th>
-                <th>Amount</th>
-                <th>Action</th>
+                <th scope="col"></th>
               </tr>
             </thead>
           </table>

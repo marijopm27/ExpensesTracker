@@ -9,54 +9,128 @@ body {
 .section {
     display: flex;
 }
+h1 {
+    text-align: center;
+}
 .container {
-    flex: 1 200px;
+    flex: 1;
     font-size: 16px;
     
 } 
 .subcontainer {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-auto-flow: row;
+    grid-row-gap: 10px;
 }
+input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin: 8px 0;
+    resize: vertical;
+  }
 
+/* BUDGET SECTION */
 .budget {
-    background-color: #d3e1ed;
-    display: grid;
+    background-color: #c1d2de;
+    align-content: center;
+    justify-content: center;
+
 }
 #budget-submit-button {
     background-color: #406E8E;
+    border: none;
+    width: 100%;
     color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    align-content: center;
+    font-size: 16px;
     
 }
-.budget, h3 {
-
+div.budget >h3 {
+    text-align:left ;
 }
 
-
+/* CATEGORY SECTION */
 .category {
-
+    background-color: #c1d2de;
 }
 
 #category-submit-button {
-
+    background-color: #406E8E;
+    border: none;
+    width: 100%;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+div.category >h3 {
+    text-align: left;
 }
 
+/* EXPENSE SECTION */
 .expense {
-
+    background-color: #c1d2de;
 }
 #expense-submit-button {
+    background-color: #406E8E;
+    border: none;
+    width: 100%;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
 
+div.expense >h3 {
+    text-align: left;
+}
+
+#expense-amout {
+    width: 100%;
+}
+
+table {
+    border-collapse: collapse;
+    letter-spacing: 1px;
 }
 
 
 
-.expenses-list {
-    flex: 2 200px;
-    
-    align-items: flex-start;
-    
-}
+/* HISTORY EXPENSES SECTION */
 
-.expenses-list, h3 {
+.expenses-table {
+    flex: 2;
+      
+}
+.important-amounts-labels {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding-inline: 10%;
+    margin-bottom: 0;
+    max-height: fit-content;
+  
+}
+.important-amounts {
+    display: grid;
+    margin-top: 0;
+    grid-template-columns: repeat(3, 1fr);
+    padding-block-end: 7rem;
+    padding-inline: 10%;
+    max-height: fit-content ;
+}
+div.important-amounts> p {
+    background-color: #ccc;
+}
+.expenses-table, h3 {
     text-align:center;
 }

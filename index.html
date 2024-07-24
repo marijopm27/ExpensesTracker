@@ -47,8 +47,8 @@
       </div>
     </div>
       <!-- Expenses table -->
-      <div class="expenses-table">
-        <h3>Expenses of the Month</h3>
+      <div class="expenses-history">
+        <h3>History of Expenses</h3>
         <div class="important-amounts-labels">
           <h3>Total Budget</h3>
           <h3>Total Expenses</h3>
@@ -59,13 +59,24 @@
           <p id="total-expenses">----</p>
           <p id="budget-left">----</p>
         </div>
-        <div class="expenses-list-container" id="table">
-          <table>
+        <div class="expenses-table-container" id="table">
+          <table class="expense-table" >
             <thead>
               <tr>
-                <th scope="col"></th>
+                <th>Expense Name</th>
+                <th>Expense Amount</th>
+                <th>Actions</th>
               </tr>
             </thead>
+            <body>
+              <tr>
+                <td></td>
+                <td></td>
+                <td><button>Edit</button><button>Remove</button></td>
+                
+              </tr>
+            </body>
+          
           </table>
         </div>
       </div>

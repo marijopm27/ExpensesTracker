@@ -24,7 +24,7 @@ body {
 .subcontainer {
     width: 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 2fr 1fr; /* Ajuste aquí */
     grid-row-gap: 10px;
     grid-column-gap: 10px;
 }
@@ -146,6 +146,46 @@ header {
 }
 
 .category button:hover {
+    background-color: #253d51;
+}
+/* Expense Section */
+.expense {
+    background-color: #c1d2de;
+    padding: 1.25em 0.9em;
+    box-shadow: 0 0.6em 1.2em rgb(220, 226, 228);
+    margin-bottom: 20px;
+}
+
+.expense h2 {
+    text-align: center;
+}
+
+.expense label {
+    display: block;
+    margin-bottom: 0.5em;
+}
+
+.expense input[type=text],
+.expense select {
+    width: 100%;
+    padding: 0.75em;
+    margin-bottom: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.expense button {
+    width: 100%;
+    padding: 0.75em;
+    background-color: #406E8E;
+    border: none;
+    color: white;
+    border-radius: 4px;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.expense button:hover {
     background-color: #253d51;
 }
 

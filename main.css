@@ -283,6 +283,37 @@ header {
 }
 
 
+#expense-table-sumary {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#expense-table-sumary thead {
+    background-color: #406E8E;
+    color: white;
+}
+
+#expense-table-sumary th, #expense-table-sumary td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center; 
+}
+#expense-table-sumary th {
+    background-color: #253d51;
+}
+
+#expense-table-sumary tbody tr:nth-child(odd) {
+    background-color: #f2f6f9;
+}
+
+#expense-table-sumary tbody tr:nth-child(even) {
+    background-color: #e5e9ec;
+}
+
+#expense-table-sumary td {
+    vertical-align: middle;
+}
+
 /* Budget Section */
 .budget, .important-amounts-budget {
     background-color: #c1d2de;

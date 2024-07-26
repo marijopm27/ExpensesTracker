@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const expenseCurrencyInput = document.getElementById('expense-currency');
     const expenseSubmitButton = document.getElementById('expense-submit-button');
     const tableExpense = document.getElementById('table-expense');
+    const tableExpenseSumary = document.getElementById('table-expense-sumary');
 
     let editingCategory = null;
     let editingExpense = null;
@@ -202,7 +203,11 @@ document.addEventListener('DOMContentLoaded', function() {
             tableExpense.innerHTML = '';
             expenses.forEach(expense => {
                 createExpenseRow(expense);
+                
             });
+        }
+        if (tableExpenseSumary){
+            createExpenseRowWithoutButtons(expense);
         }
 
         updateTotalExpensesAndBudgetLeft();
@@ -246,6 +251,39 @@ document.addEventListener('DOMContentLoaded', function() {
     
         tableExpense.appendChild(row);
     }
+
+    function createExpenseRowWithoutButtons(expense) {
+        let row = document.createElement('tr');
+        
+        let currencySymbol = expense.currency === 'dollars' ? '$' : '₡';
+        
+        row.innerHTML = `
+            <td>${expense.name}</td>
+            <td>${currencySymbol} ${expense.amount}</td>
+            <td>${currencySymbol}</td>
+            <td>${expense.category}</td>
+            <td>${expense.date}</td>
+        `;
+        
+        tableExpense.appendChild(row);
+    }
+    
+    function createExpenseRowWithoutButtons(expense) {
+        let row = document.createElement('tr');
+        
+        let currencySymbol = expense.currency === 'dollars' ? '$' : '₡';
+        
+        row.innerHTML = `
+            <td>${expense.name}</td>
+            <td>${currencySymbol} ${expense.amount}</td>
+            <td>${currencySymbol}</td>
+            <td>${expense.category}</td>
+            <td>${expense.date}</td>
+        `;
+        
+        tableExpense.appendChild(row);
+    }
+    
 
     function validateExpenseInput(amount, currency) {
         if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {

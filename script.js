@@ -1,6 +1,12 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
     const toggleMenu = document.querySelector('.toggle-menu');
     const navbar = document.querySelector('.navbar');
+
+    if (toggleMenu && navbar) {
+        toggleMenu.addEventListener('click', function() {
+            navbar.classList.toggle('active');
+        });
+    }
 
     // Presupuesto Elementos
     const budgetAmountInput = document.getElementById('budget-amount');
@@ -16,39 +22,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let editingCategory = null;  // Variable para almacenar la categoría que se está editando
 
-    if (toggleMenu && navbar) {
-        toggleMenu.addEventListener('click', () => {
-            navbar.classList.toggle('active');
-        });
+    const savedBudget = localStorage.getItem('budget');
+    if (savedBudget) {
+        totalBudgetSpan.textContent = savedBudget;
+        budgetLeftSpan.textContent = savedBudget;
+    } else {
+        totalBudgetSpan.textContent = '---';
+        budgetLeftSpan.textContent = '---';
+    }
+
+    function updateBudget(amount) {
+        totalBudgetSpan.textContent = amount;
+        budgetLeftSpan.textContent = amount;
+    }
+
+    function validateInput(amount, currency) {
+        if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
+            alert('Please enter a valid budget amount.');
+            return false;
+        }
+        if (!currency.trim()) {
+            alert('Currency cannot be empty.');
+            return false;
+        }
+        return true;
     }
 
     if (budgetSubmitButton) {
-        const savedBudget = localStorage.getItem('budget');
-        if (savedBudget) {
-            totalBudgetSpan.textContent = savedBudget;
-            budgetLeftSpan.textContent = savedBudget;
-        } else {
-            totalBudgetSpan.textContent = '---';
-            budgetLeftSpan.textContent = '---';
-        }
-
-        function updateBudget(amount) {
-            totalBudgetSpan.textContent = amount;
-            budgetLeftSpan.textContent = amount;
-        }
-
-        function validateInput(amount, currency) {
-            if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
-                alert('Please enter a valid budget amount.');
-                return false;
-            }
-            if (!currency.trim()) {
-                alert('Currency cannot be empty.');
-                return false;
-            }
-            return true;
-        }
-
         budgetSubmitButton.addEventListener('click', () => {
             const budgetAmount = budgetAmountInput.value;
             const currency = currencyInput.value;
@@ -59,14 +59,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 budgetSubmitButton.textContent = 'Update Budget';
                 budgetAmountInput.value = '';
                 currencyInput.value = '';
-            } else {
-                budgetAmountInput.value = '';
-                currencyInput.value = '';
             }
         });
     }
 
-    // Funcionalidad de Categoría
     function loadCategories() {
         const categories = JSON.parse(localStorage.getItem('categories')) || [];
         categoryList.innerHTML = '';

@@ -23,15 +23,17 @@
             </div>
         </div>
     </header>
-    <h1>Monthly Expenses Tracker</h1>
+    <h1>Expenses</h1>
 
     <div class="wrapper">
         <div class="container">
             <div class="subcontainer">
                 <div class="expense">
                     <h2>Add Expense</h2>
-                    <label>Expense:</label>
-                    <input type="text" id="expense-amount" placeholder="Enter Expense">
+                    <label>Expense Name:</label>
+                    <input type="text" id="expense-name" placeholder="Enter Expense Name">
+                    <label>Expense Amount:</label>
+                    <input type="text" id="expense-amount" placeholder="Enter Expense Amount">
                     <label>Select Category</label>
                     <select id="category-name">
                       <option value="Default">Default</option>
@@ -63,9 +65,11 @@
             <table id="expense-table">
                 <thead>
                     <tr>
+                        <th>Expense</th>
                         <th>Amount</th>
-                        <th>Date</th>
                         <th>Category</th>
+                        <th>Date</th>
+                        <th>Currency</th>
                         <th>Actions</th>
                     </tr>
                 </thead>

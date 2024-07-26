@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const categoryDropdown = document.getElementById('category-name'); // Dropdown en la página de gastos
 
     // Elementos de gastos
+    const expenseNameInput = document.getElementById('expense-name');
     const expenseAmountInput = document.getElementById('expense-amount');
     const expenseDateInput = document.getElementById('expense-date');
     const expenseCurrencyInput = document.getElementById('expense-currency');
@@ -214,9 +215,11 @@ document.addEventListener('DOMContentLoaded', function() {
         let row = document.createElement('tr');
     
         row.innerHTML = `
+            <td>${expense.name}</td>
             <td>${expense.amount} ${expense.currency}</td>
-            <td>${expense.date}</td>
             <td>${expense.category}</td>
+            <td>${expense.date}</td>
+            <td>${expense.currency}</td>
             <td>
                 <button class="fa-solid fa-pen-to-square edit" style="font-size: 1.2em;"></button>
                 <button class="fa-solid fa-trash-can delete" style="font-size: 1.2em;"></button>
@@ -227,10 +230,11 @@ document.addEventListener('DOMContentLoaded', function() {
         let editButton = row.querySelector('.edit');
         editButton.addEventListener('click', () => {
             editingExpense = expense; // Establece el gasto en edición
+            expenseNameInput.value = expense.name;
             expenseAmountInput.value = expense.amount;
             expenseDateInput.value = expense.date;
             expenseCurrencyInput.value = expense.currency;
-            document.getElementById('category-name').value = expense.category; // Asume que el dropdown tiene la categoría seleccionada
+            categoryDropdown.value = expense.category; // Selecciona la categoría en el dropdown
             expenseSubmitButton.textContent = 'Edit Expense';
         });
     
@@ -242,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     
-        document.getElementById('table-expense').appendChild(row);
+        tableExpense.appendChild(row);
     }
     
     function addExpense(expense) {
@@ -261,6 +265,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (expenseSubmitButton) {
         expenseSubmitButton.addEventListener('click', () => {
+            const name = expenseNameInput.value.trim();
             const amount = expenseAmountInput.value;
             const date = expenseDateInput.value;
             const currency = expenseCurrencyInput.value;
@@ -269,6 +274,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (editingExpense) {
                 // Si estamos editando un gasto existente
                 const updatedExpense = {
+                    name,
                     amount,
                     date,
                     currency,
@@ -281,6 +287,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 // Si estamos agregando un nuevo gasto
                 const newExpense = {
+                    name,
                     amount,
                     date,
                     currency,
@@ -289,6 +296,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 addExpense(newExpense);
             }
 
+            expenseNameInput.value = '';
             expenseAmountInput.value = '';
             expenseDateInput.value = '';
             expenseCurrencyInput.value = '';

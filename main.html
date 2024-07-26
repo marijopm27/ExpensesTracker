@@ -44,9 +44,23 @@
                 </div>
             </div>
         </div>
-        <div class="expenses-history">
+        <div class="sumary-table">
             <h3>Summary Expense</h3>
-            <div class="expenses-history-table" id="history-table"></div>
+            <table id="expense-table">
+                <thead>
+                    <tr>
+                        <th>Expense</th>
+                        <th>Amount</th>
+                        <th>Category</th>
+                        <th>Date</th>
+                        <th>Currency</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="table-expense">
+                    <!-- Rows will be inserted here dynamically -->
+                </tbody>
+            </table>
         </div>
     </div>
 

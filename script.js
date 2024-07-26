@@ -8,19 +8,21 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Presupuesto Elementos
+    // Elementos de presupuesto
     const budgetAmountInput = document.getElementById('budget-amount');
     const currencyInput = document.getElementById('currency');
     const budgetSubmitButton = document.getElementById('budget-submit-button');
     const totalBudgetSpan = document.getElementById('total-budget');
     const budgetLeftSpan = document.getElementById('budget-left');
 
-    // Categorías Elementos
+    // Elementos de categorías
     const categoryNameInput = document.getElementById('category-name');
     const categorySubmitButton = document.getElementById('category-submit-button');
     const categoryList = document.getElementById('category-list');
+    const categoryDropdown = document.getElementById('category-name'); // Dropdown en la página de gastos
 
     let editingCategory = null;  // Variable para almacenar la categoría que se está editando
+    let editingExpense = null;
 
     const savedBudget = localStorage.getItem('budget');
     if (savedBudget) {
@@ -65,10 +67,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function loadCategories() {
         const categories = JSON.parse(localStorage.getItem('categories')) || [];
-        categoryList.innerHTML = '';
-        categories.forEach(category => {
-            createCategoryList(category);
-        });
+        console.log('Categorías cargadas:', categories);
+
+        if (categoryList) {
+            categoryList.innerHTML = '';
+            categories.forEach(category => {
+                createCategoryList(category);
+            });
+        }
+
+        populateCategoryDropdown(); // Llenar el dropdown con categorías
     }
 
     function createCategoryList(categoryName) {
@@ -168,6 +176,20 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    function populateCategoryDropdown() {
+        const categories = JSON.parse(localStorage.getItem('categories')) || [];
+        if (categoryDropdown) {
+            categoryDropdown.innerHTML = ''; // Limpiar opciones existentes
+            categories.forEach(category => {
+                let option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                categoryDropdown.appendChild(option);
+            });
+        }
+    }
+    
 
     loadCategories();
 });

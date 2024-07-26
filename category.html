@@ -1,67 +1,57 @@
-</html>
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <title>Monthly Expenses</title>
   <link rel="stylesheet" href="main.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
 </head>
-
 <body>
-    <header>
-        <div class="navbar">
-            <ul class="links">
-            <li><a href="main.html" >Expense Sumary</a></li>
-            <li><a href="budget.html" >Budget</a></li>
-            <li><a href="category.html" >Category</a></li>
-            <li><a href="expense.html" >Expense</a></li>
-            </ul>
-            <div class="toggle-menu">
-                <i class="fas fa-bars"></i>
-            </div>
-        </div>
-    </header>
-      <h1>Monthly Expenses Tracker</h1>
-
-    <div class="wrapper">
-        <div class="container">
-            <div class="sub-container">
-                <div class="category">
-                    <h2>Add Category</h2>
-                    <label>Category:</label>
-                    <input type="text" id="category-name" placeholder="Enter Category">
-                    <button class="submit-" id="category-submit-button">Set Category</button>
-                  </div>
-                <div class="important-amounts-labels">
-                    <div>
-                        <p>Total Budget</p>
-                        <span id="total-budget">---</span>
-                    </div>
-                    <div>
-                        <p>Total Expenses</p>
-                        <span id="total-expenses">---</span>
-                    </div>
-                    <div>
-                        <p>Budget Left</p>
-                        <span id="budget-left">---</span>
-                    </div>
-                    
-                </div>
-                
-            </div>
-        </div>
-        <div class="sumary-table">
-            <h3>Categories</h3>
-            <div class="expense-table" id="table-expense"></div>
-            
-        </div>
+  <header>
+    <div class="navbar">
+      <ul class="links">
+        <li><a href="main.html">Expense Summary</a></li>
+        <li><a href="budget.html">Budget</a></li>
+        <li><a href="category.html">Category</a></li>
+        <li><a href="expense.html">Expense</a></li>
+      </ul>
+      <div class="toggle-menu">
+        <i class="fas fa-bars"></i>
+      </div>
     </div>
-
+  </header>
+  <h1>Monthly Expenses Tracker</h1>
+  <div class="wrapper">
+    <div class="container">
+      <div class="subcontainer">
+        <div class="category">
+          <h2>Add Category</h2>
+          <label>Category:</label>
+          <input type="text" id="category-name" placeholder="Enter Category">
+          <button class="submit" id="category-submit-button">Set Category</button>
+        </div>
+        <div class="important-amounts-labels flex-space">
+          <div>
+            <p>Total Budget</p>
+            <span id="total-budget">---</span>
+          </div>
+          <div>
+            <p>Total Expenses</p>
+            <span id="total-expenses">---</span>
+          </div>
+          <div>
+            <p>Budget Left</p>
+            <span id="budget-left">---</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="summary-table">
+      <h3>Categories</h3>
+      <div class="expense-table" id="table-expense"></div>
+    </div>
+  </div>
   <script src="script.js"></script>
 </body>
-
 </html>

@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Menú de navegación
     const toggleMenu = document.querySelector('.toggle-menu');
     const navbar = document.querySelector('.navbar');
 
@@ -21,9 +22,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const categoryList = document.getElementById('category-list');
     const categoryDropdown = document.getElementById('category-name'); // Dropdown en la página de gastos
 
-    let editingCategory = null;  // Variable para almacenar la categoría que se está editando
-    let editingExpense = null;
+    // Elementos de gastos
+    const expenseAmountInput = document.getElementById('expense-amount');
+    const expenseDateInput = document.getElementById('expense-date');
+    const expenseCurrencyInput = document.getElementById('expense-currency');
+    const expenseSubmitButton = document.getElementById('expense-submit-button');
+    const tableExpense = document.getElementById('table-expense');
 
+    let editingCategory = null;  // Variable para almacenar la categoría que se está editando
+    let editingExpense = null;   // Variable para almacenar el gasto que se está editando
+
+    // Manejo del presupuesto
     const savedBudget = localStorage.getItem('budget');
     if (savedBudget) {
         totalBudgetSpan.textContent = savedBudget;
@@ -65,6 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Manejo de categorías
     function loadCategories() {
         const categories = JSON.parse(localStorage.getItem('categories')) || [];
         console.log('Categorías cargadas:', categories);
@@ -189,7 +199,109 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     }
+
+    // Manejo de gastos
+    function loadExpenses() {
+        const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+        console.log('Gastos cargados:', expenses);
+
+        if (tableExpense) {
+            tableExpense.innerHTML = '';
+            expenses.forEach(expense => {
+                createExpenseRow(expense);
+            });
+        }
+    }
+
+    function createExpenseRow(expense) {
+        let row = document.createElement('tr');
+    
+        row.innerHTML = `
+            <td>${expense.amount} ${expense.currency}</td>
+            <td>${expense.date}</td>
+            <td>${expense.category}</td>
+            <td>
+                <button class="fa-solid fa-pen-to-square edit" style="font-size: 1.2em;"></button>
+                <button class="fa-solid fa-trash-can delete" style="font-size: 1.2em;"></button>
+            </td>
+        `;
+    
+        // Botón de editar
+        let editButton = row.querySelector('.edit');
+        editButton.addEventListener('click', () => {
+            editingExpense = expense; // Establece el gasto en edición
+            expenseAmountInput.value = expense.amount;
+            expenseDateInput.value = expense.date;
+            expenseCurrencyInput.value = expense.currency;
+            document.getElementById('category-name').value = expense.category; // Asume que el dropdown tiene la categoría seleccionada
+            expenseSubmitButton.textContent = 'Edit Expense';
+        });
+    
+        // Botón de eliminar
+        let deleteButton = row.querySelector('.delete');
+        deleteButton.addEventListener('click', () => {
+            if (confirm(`Are you sure you want to delete this expense?`)) {
+                removeExpense(expense);
+            }
+        });
+    
+        document.getElementById('table-expense').appendChild(row);
+    }
     
 
+    function addExpense(expense) {
+        const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+        expenses.push(expense);
+        localStorage.setItem('expenses', JSON.stringify(expenses));
+        createExpenseRow(expense);
+    }
+
+    function removeExpense(expenseToRemove) {
+        let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+        expenses = expenses.filter(expense => !(expense.amount === expenseToRemove.amount && expense.date === expenseToRemove.date && expense.currency === expenseToRemove.currency && expense.category === expenseToRemove.category));
+        localStorage.setItem('expenses', JSON.stringify(expenses));
+        loadExpenses();
+    }
+
+    if (expenseSubmitButton) {
+        expenseSubmitButton.addEventListener('click', () => {
+            const amount = expenseAmountInput.value.trim();
+            const date = expenseDateInput.value.trim();
+            const currency = expenseCurrencyInput.value.trim();
+            const category = document.getElementById('category-name').value;
+
+            if (!amount || !date || !currency || category === 'Default') {
+                alert('Please fill all the fields correctly.');
+                return;
+            }
+
+            const expense = { amount, date, currency, category };
+
+            if (editingExpense) {
+                // Editar un gasto existente
+                const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+                const index = expenses.findIndex(exp => exp.amount === editingExpense.amount && exp.date === editingExpense.date && exp.currency === editingExpense.currency && exp.category === editingExpense.category);
+
+                if (index > -1) {
+                    expenses[index] = expense;
+                    localStorage.setItem('expenses', JSON.stringify(expenses));
+                    loadExpenses();
+                    editingExpense = null; // Limpiar la edición
+                    expenseSubmitButton.textContent = 'Add Expense'; // Restaurar el texto del botón
+                    expenseAmountInput.value = '';
+                    expenseDateInput.value = '';
+                    expenseCurrencyInput.value = '';
+                }
+            } else {
+                // Agregar un nuevo gasto
+                addExpense(expense);
+                expenseAmountInput.value = '';
+                expenseDateInput.value = '';
+                expenseCurrencyInput.value = '';
+            }
+        });
+    }
+
     loadCategories();
+    loadExpenses();
 });

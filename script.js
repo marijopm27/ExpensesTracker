@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     const budgetAmountInput = document.getElementById('budget-amount');
-    const currencyInput = document.getElementById('currency');
+    const currencyInput = document.getElementById('budget-currency');
     const budgetSubmitButton = document.getElementById('budget-submit-button');
     const totalBudgetSpan = document.getElementById('total-budget');
     const budgetLeftSpan = document.getElementById('budget-left');
@@ -62,6 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (validateInput(budgetAmount, currency)) {
                 localStorage.setItem('budget', budgetAmount);
+                localStorage.setItem('budget-currency', currency);
                 updateBudget(budgetAmount);
                 budgetSubmitButton.textContent = 'Update Budget';
                 budgetAmountInput.value = '';
@@ -206,10 +207,12 @@ document.addEventListener('DOMContentLoaded', function() {
     function createExpenseRow(expense) {
         let row = document.createElement('tr');
     
+        let currencySymbol = expense.currency === 'dollars' ? '$' : '₡';
+    
         row.innerHTML = `
             <td>${expense.name}</td>
-            <td>${expense.amount}</td>
-            <td>${expense.currency}</td>
+            <td>${currencySymbol} ${expense.amount}</td>
+            <td>${currencySymbol}</td>
             <td>${expense.category}</td>
             <td>${expense.date}</td>
             
@@ -240,9 +243,13 @@ document.addEventListener('DOMContentLoaded', function() {
         tableExpense.appendChild(row);
     }
 
-    function validateExpenseInput(amount) {
+    function validateExpenseInput(amount, currency) {
         if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
             showError('Please enter a valid expense amount.');
+            return false;
+        }
+        if (currency !== 'dollars' && currency !== 'colones') {
+            showError('Currency must be either "dollars" or "colones".');
             return false;
         }
         return true;
@@ -253,8 +260,8 @@ document.addEventListener('DOMContentLoaded', function() {
         expenses.push(expense);
         localStorage.setItem('expenses', JSON.stringify(expenses));
         createExpenseRow(expense);
-        updateTotalExpense(parseFloat(expense.amount));
-        updateBudgetLeft(-parseFloat(expense.amount));
+        updateTotalExpense(parseFloat(expense.amount), expense.currency);
+        updateBudgetLeft(-parseFloat(expense.amount), expense.currency);
     }
 
     function removeExpense(expenseToRemove) {
@@ -265,26 +272,29 @@ document.addEventListener('DOMContentLoaded', function() {
         loadExpenses(); // Re-load to ensure the UI is up-to-date
     }
 
-    function updateBudgetLeft(amount) {
-        const currentBudgetLeft = parseFloat(budgetLeftSpan.textContent) || 0;
-        const newBudgetLeft = currentBudgetLeft + amount;
-        budgetLeftSpan.textContent = newBudgetLeft.toFixed(2);
+    function updateTotalExpense(amount, currency) {
+        const currentTotalExpense = parseFloat(totalExpenseSpan.textContent.replace(/[^\d.-]/g, '')) || 0;
+        const newTotalExpense = currentTotalExpense + amount;
+        totalExpenseSpan.textContent = (currency === 'dollars' ? '$' : '₡') + newTotalExpense.toFixed(2);
     }
 
-    function updateTotalExpense(amount) {
-        const currentTotalExpense = parseFloat(totalExpenseSpan.textContent) || 0;
-        const newTotalExpense = currentTotalExpense + amount;
-        totalExpenseSpan.textContent = newTotalExpense.toFixed(2);
+    function updateBudgetLeft(amount, currency) {
+        const currentBudgetLeft = parseFloat(budgetLeftSpan.textContent.replace(/[^\d.-]/g, '')) || 0;
+        const newBudgetLeft = currentBudgetLeft + amount;
+        budgetLeftSpan.textContent = (currency === 'dollars' ? '$' : '₡') + newBudgetLeft.toFixed(2);
     }
 
     function updateTotalExpensesAndBudgetLeft() {
         const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
-        const totalExpense = expenses.reduce((total, expense) => total + parseFloat(expense.amount), 0);
-        totalExpenseSpan.textContent = totalExpense.toFixed(2);
-
-        const budget = parseFloat(totalBudgetSpan.textContent) || 0;
-        const budgetLeft = budget - totalExpense;
-        budgetLeftSpan.textContent = budgetLeft.toFixed(2);
+        let totalExpense = 0;
+        expenses.forEach(expense => {
+            totalExpense += parseFloat(expense.amount);
+        });
+        const currency = expenses[0] ? expenses[0].currency : 'dollars'; // Assume all expenses have the same currency
+        totalExpenseSpan.textContent = (currency === 'dollars' ? '$' : '₡') + totalExpense.toFixed(2);
+        const budgetAmount = parseFloat(totalBudgetSpan.textContent.replace(/[^\d.-]/g, '')) || 0;
+        const budgetLeft = budgetAmount - totalExpense;
+        budgetLeftSpan.textContent = (currency === 'dollars' ? '$' : '₡') + budgetLeft.toFixed(2);
     }
 
     if (expenseSubmitButton) {
@@ -292,10 +302,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const name = expenseNameInput.value.trim();
             const amount = expenseAmountInput.value;
             const date = expenseDateInput.value;
-            const currency = expenseCurrencyInput.value;
+            const currency = expenseCurrencyInput.value.toLowerCase();
             const category = categoryDropdown.value;
 
-            if (!validateExpenseInput(amount)) {
+            if (!validateExpenseInput(amount, currency)) {
                 return;
             }
 

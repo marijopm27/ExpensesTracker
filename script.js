@@ -130,7 +130,11 @@ document.addEventListener('DOMContentLoaded', function() {
             if (newName) {
                 categories[index] = newName;
             } else {
+                // Eliminar la categoría
                 categories.splice(index, 1);
+                
+                // Eliminar los gastos asociados a la categoría
+                removeExpensesByCategory(oldName);
             }
             localStorage.setItem('categories', JSON.stringify(categories));
             loadCategories();
@@ -284,13 +288,36 @@ document.addEventListener('DOMContentLoaded', function() {
         budgetLeftSpan.textContent = (currency === 'dollars' ? '$' : '₡') + newBudgetLeft.toFixed(2);
     }
 
+    function removeExpensesByCategory(categoryName) {
+        let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+        let totalAmountToSubtract = 0;
+
+        // Filtrar los gastos de la categoría eliminada y sumar sus montos
+        expenses = expenses.filter(expense => {
+            if (expense.category === categoryName) {
+                totalAmountToSubtract += parseFloat(expense.amount);
+                return false; // Excluir de la lista de gastos
+            }
+            return true; // Incluir otros gastos
+        });
+
+        // Guardar los gastos restantes
+        localStorage.setItem('expenses', JSON.stringify(expenses));
+
+        // Actualizar la interfaz con los gastos eliminados
+        updateTotalExpensesAndBudgetLeft();
+
+        // Ajustar el presupuesto restante
+        updateBudgetLeft(totalAmountToSubtract, 'dollars'); // Asume 'dollars'; cambiar si necesario
+    }
+
     function updateTotalExpensesAndBudgetLeft() {
         const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
         let totalExpense = 0;
         expenses.forEach(expense => {
             totalExpense += parseFloat(expense.amount);
         });
-        const currency = expenses[0] ? expenses[0].currency : 'dollars'; // Assume all expenses have the same currency
+        const currency = expenses[0] ? expenses[0].currency : 'dollars'; // Asume que todos los gastos tienen la misma moneda
         totalExpenseSpan.textContent = (currency === 'dollars' ? '$' : '₡') + totalExpense.toFixed(2);
         const budgetAmount = parseFloat(totalBudgetSpan.textContent.replace(/[^\d.-]/g, '')) || 0;
         const budgetLeft = budgetAmount - totalExpense;

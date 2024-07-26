@@ -155,21 +155,30 @@ header {
 
 /* Category List Summary */
 .category-list-summary {
-    background-color: #c1d2de;
     padding: 1.25em 0.9em;
     box-shadow: 0 0.6em 1.2em rgb(220, 226, 228);
     margin-bottom: 20px;
 }
+
+#category-table thead {
+    background-color: #406E8E; /* Fondo de la cabecera de la tabla de categorías, igual que expense table */
+    color: white;
+}
+
+#category-table tbody tr:nth-child(odd) {
+    background-color: #f2f6f9; /* Igual que el fondo de las filas impares en expense table */
+}
+
+#category-table tbody tr:nth-child(even) {
+    background-color: #e5e9ec; /* Igual que el fondo de las filas pares en expense table */
+}
+
 
 #category-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-#category-table thead {
-    background-color: #406E8E;
-    color: white;
-}
 
 #category-table th, #category-table td {
     border: 1px solid #ccc;
@@ -181,13 +190,6 @@ header {
     background-color: #253d51;
 }
 
-#category-table tbody tr:nth-child(odd) {
-    background-color: #f2f6f9;
-}
-
-#category-table tbody tr:nth-child(even) {
-    background-color: #e5e9ec;
-}
 
 #category-table td {
     vertical-align: middle;

@@ -15,15 +15,16 @@ body {
 }
 
 .container {
-    width: 100%;
+    width:100%;
 } 
 
 .subcontainer {
+    
     width: 100%;
     display: grid;
-   
-    grid-auto-flow: column;
+    grid-template-columns: 1fr 1fr ;
     grid-row-gap: 10px;
+    grid-column-gap: 10px;
 }
 
 .flex {
@@ -66,9 +67,30 @@ header {
     margin: 0 auto;
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
+    padding: 0 1rem;
 }
 
+.navbar .links{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    gap: 2rem;
+    
+}
+
+.navbar ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100;
+
+}
+
+.navbar ul li  {
+    margin: 0 1rem;
+}
 
 .navbar ul li a {
     color: #fff;
@@ -76,23 +98,61 @@ header {
     border-radius: 3px;
     
 }
-.a:hover {
+
+.navbar ul li a:hover {
     background-color: #253d51 ;
     transition: .5s;
 }
-.navbar .links{
-    display: flex;
-    gap: 2rem;
-    
-}
+
 .navbar .toggle-menu {
     font-size: 1.5rem;
     color: #fff;
     cursor: pointer;
+    display: none;
+}
+/* Category Section */
+
+.category {
+    flex: 1;
+    margin: 0.5rem;
+    background-color: #c1d2de;
+    padding: 1.25em 0.9em;
+    box-shadow: 0 0.6em 1.2em rgb(220, 226, 228);
+    margin-bottom: 20px;
+
+}
+
+.category h2 {
+    text-align: center;
+}
+
+.category label {
+    display: block;
+    margin-bottom: 0.5em;
+}
+.category input[type=text]{
+    width: 100%;
+    padding: 0.75em;
+    margin-bottom: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.category button {
+    width: 100%;
+    padding: 0.75em;
+    background-color: #406E8E;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+.category button:hover {
+    background-color: #253d51;
 }
 
 /* Budget Section */
 .budget, .important-amounts-labels{
+    flex: 1;
+    margin: 0.5rem;
     background-color: #c1d2de;
     padding: 1.25em 0.9em;
     box-shadow: 0 0.6em 1.2em rgb(220, 226, 228);
@@ -114,17 +174,8 @@ div.budget >h3 {
     text-align:left ;
 }
 
-/* HISTORY EXPENSES SECTION */
 
-/* .important-amounts-labels {
-    border-radius: 0.3em;
-    margin: 2em 0;
-    padding: 1.2em; 
-    padding: 1.25em 0.9em;
-    box-shadow: 0 0.6em 1.2em rgb(220, 226, 228);
-} 
-*/
-
+/* Sumary  SECTION */
 .important-amounts-labels p{
     font-weight: 500;
     margin-top: 0.6em;
@@ -150,11 +201,19 @@ div.budget >h3 {
         grid-template-columns: 1fr;
         gap: 1em;
     }
-    .navbar ul li a {
+    .navbar ul {
+        flex-direction: column;
         display: none;
     }
+    .navbar ul li {
+        margin: 1rem 0;
+    }
+    
     .navbar .toggle-menu {
         display: block;
+    }
+    .category, .important-amounts-labels {
+        flex: 1 100%;
     }
     
 }

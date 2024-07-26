@@ -284,13 +284,26 @@ header {
 
 
 /* Budget Section */
-.budget, .important-amounts-labels {
+.budget, .important-amounts-budget {
     background-color: #c1d2de;
     padding: 1.25em 0.9em;
     box-shadow: 0 0.6em 1.2em rgb(220, 226, 228);
     margin-bottom: 20px;
 }
+.important-amounts-budget p {
+    font-weight: 500;
+    margin-top: 0.6em;
+    margin-bottom: 0.6em;
+    font-size: 20px;
+}
 
+.important-amounts-budget span {
+    display: block;
+    text-align: center;
+    margin-top: 0.6em;
+    margin-bottom: 0.6em;
+    font-size: 20px;
+}
 .submit {
     background-color: #406E8E;
     border-radius: 3px;
@@ -309,10 +322,29 @@ div.budget > h3 {
 }
 
 /* History Expenses Section */
+.important-amounts-labels {
+    display: grid;
+    grid-template-columns: 1fr; /* Una columna de igual tamaño */
+    grid-template-rows: repeat(3, auto); /* Tres filas con altura automática */
+    gap: 10px; /* Espacio entre las filas */
+    background-color: #c1d2de;
+    padding: 1.25em 0.9em;
+    box-shadow: 0 0.6em 1.2em rgb(220, 226, 228);
+    margin-bottom: 20px;
+}
+
+.important-amounts-labels > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .important-amounts-labels p {
-    font-weight: 500;
+    font-weight: 700;
     margin-top: 0.6em;
     margin-bottom: 0.6em;
+    text-align: center;
+    font-size: 20px;
 }
 
 .important-amounts-labels span {
@@ -320,7 +352,9 @@ div.budget > h3 {
     text-align: center;
     margin-top: 0.6em;
     margin-bottom: 0.6em;
+    font-size: 20px;
 }
+
 
 
 

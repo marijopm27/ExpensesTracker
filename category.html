@@ -47,14 +47,21 @@
         </div>
       </div>
     </div>
-    <div class="category-list-sumary">
+    <div class="category-list-summary">
         <h3>Category Summary</h3>
-        <div class="category-list-sumarysublist-content">
-            <div>Category Name</div>
-            <div>Actions</div>
-        </div>
-        <!-- Más elementos .category-list-sumarysublist-content aquí -->
+        <table id="category-table">
+            <thead>
+                <tr>
+                    <th>Category Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="category-list">
+                <!-- Las categorías se añadirán aquí dinámicamente -->
+            </tbody>
+        </table>
     </div>
+    
   <script src="script.js"></script>
 </body>
 </html>

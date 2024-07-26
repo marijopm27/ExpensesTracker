@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Elementos de categorías
     const categoryNameInput = document.getElementById('category-name');
     const categorySubmitButton = document.getElementById('category-submit-button');
-    const categoryList = document.getElementById('category-list');
     const categoryDropdown = document.getElementById('category-name'); // Dropdown en la página de gastos
 
     // Elementos de gastos
@@ -75,32 +74,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Manejo de categorías
-    function loadCategories() {
-        const categories = JSON.parse(localStorage.getItem('categories')) || [];
-        console.log('Categorías cargadas:', categories);
-
-        if (categoryList) {
-            categoryList.innerHTML = '';
-            categories.forEach(category => {
-                createCategoryList(category);
-            });
-        }
-
-        populateCategoryDropdown(); // Llenar el dropdown con categorías
-    }
-
-    function createCategoryList(categoryName) {
-        let listItem = document.createElement('li');
-        listItem.classList.add('category-item', 'flex-space');
-
-        listItem.innerHTML = `
-            <p class="category-name">${categoryName}</p>
+    function createCategoryRow(categoryName) {
+        let row = document.createElement('tr');
+        
+        row.innerHTML = `
+            <td class="category-name">${categoryName}</td>
+            <td>
+                <button class="fa-solid fa-pen-to-square edit" style="font-size: 1.2em;"></button>
+                <button class="fa-solid fa-trash-can delete" style="font-size: 1.2em;"></button>
+            </td>
         `;
-
+        
         // Botón de editar
-        let editButton = document.createElement('button');
-        editButton.classList.add('fa-solid', 'fa-pen-to-square', 'edit');
-        editButton.style.fontSize = '1.2em';
+        let editButton = row.querySelector('.edit');
         editButton.addEventListener('click', () => {
             editingCategory = categoryName;  // Establece la categoría en edición
             categoryNameInput.value = categoryName;  // Coloca el nombre de la categoría en el input
@@ -109,18 +95,29 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Botón de eliminar
-        let deleteButton = document.createElement('button');
-        deleteButton.classList.add('fa-solid', 'fa-trash-can', 'delete');
-        deleteButton.style.fontSize = '1.2em';
+        let deleteButton = row.querySelector('.delete');
         deleteButton.addEventListener('click', () => {
             if (confirm(`Are you sure you want to delete the category "${categoryName}"?`)) {
                 modifyCategory(categoryName);
             }
         });
 
-        listItem.appendChild(editButton);
-        listItem.appendChild(deleteButton);
-        categoryList.appendChild(listItem);
+        document.getElementById('category-list').appendChild(row);
+    }
+
+    function loadCategories() {
+        const categories = JSON.parse(localStorage.getItem('categories')) || [];
+        console.log('Categorías cargadas:', categories);
+
+        const categoryList = document.getElementById('category-list');
+        if (categoryList) {
+            categoryList.innerHTML = '';
+            categories.forEach(category => {
+                createCategoryRow(category);
+            });
+        }
+
+        populateCategoryDropdown(); // Llenar el dropdown con categorías
     }
 
     function disableCategoryButtons(bool) {
@@ -180,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const categories = JSON.parse(localStorage.getItem('categories')) || [];
                     categories.push(categoryName);
                     localStorage.setItem('categories', JSON.stringify(categories));
-                    createCategoryList(categoryName);
+                    createCategoryRow(categoryName);
                     categoryNameInput.value = '';
                 }
             }
@@ -248,7 +245,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('table-expense').appendChild(row);
     }
     
-
     function addExpense(expense) {
         const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
         expenses.push(expense);
@@ -265,43 +261,41 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (expenseSubmitButton) {
         expenseSubmitButton.addEventListener('click', () => {
-            const amount = expenseAmountInput.value.trim();
-            const date = expenseDateInput.value.trim();
-            const currency = expenseCurrencyInput.value.trim();
-            const category = document.getElementById('category-name').value;
-
-            if (!amount || !date || !currency || category === 'Default') {
-                alert('Please fill all the fields correctly.');
-                return;
-            }
-
-            const expense = { amount, date, currency, category };
+            const amount = expenseAmountInput.value;
+            const date = expenseDateInput.value;
+            const currency = expenseCurrencyInput.value;
+            const category = categoryDropdown.value;
 
             if (editingExpense) {
-                // Editar un gasto existente
-                const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
-                const index = expenses.findIndex(exp => exp.amount === editingExpense.amount && exp.date === editingExpense.date && exp.currency === editingExpense.currency && exp.category === editingExpense.category);
-
-                if (index > -1) {
-                    expenses[index] = expense;
-                    localStorage.setItem('expenses', JSON.stringify(expenses));
-                    loadExpenses();
-                    editingExpense = null; // Limpiar la edición
-                    expenseSubmitButton.textContent = 'Add Expense'; // Restaurar el texto del botón
-                    expenseAmountInput.value = '';
-                    expenseDateInput.value = '';
-                    expenseCurrencyInput.value = '';
-                }
+                // Si estamos editando un gasto existente
+                const updatedExpense = {
+                    amount,
+                    date,
+                    currency,
+                    category
+                };
+                removeExpense(editingExpense);
+                addExpense(updatedExpense);
+                expenseSubmitButton.textContent = 'Add Expense'; // Restaurar texto del botón
+                editingExpense = null;
             } else {
-                // Agregar un nuevo gasto
-                addExpense(expense);
-                expenseAmountInput.value = '';
-                expenseDateInput.value = '';
-                expenseCurrencyInput.value = '';
+                // Si estamos agregando un nuevo gasto
+                const newExpense = {
+                    amount,
+                    date,
+                    currency,
+                    category
+                };
+                addExpense(newExpense);
             }
+
+            expenseAmountInput.value = '';
+            expenseDateInput.value = '';
+            expenseCurrencyInput.value = '';
         });
     }
 
+    // Cargar datos al inicio
     loadCategories();
     loadExpenses();
 });

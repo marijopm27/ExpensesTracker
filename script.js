@@ -216,10 +216,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
         row.innerHTML = `
             <td>${expense.name}</td>
-            <td>${expense.amount} ${expense.currency}</td>
+            <td>${expense.amount}</td>
+            <td>${expense.currency}</td>
             <td>${expense.category}</td>
             <td>${expense.date}</td>
-            <td>${expense.currency}</td>
+            
             <td>
                 <button class="fa-solid fa-pen-to-square edit" style="font-size: 1.2em;"></button>
                 <button class="fa-solid fa-trash-can delete" style="font-size: 1.2em;"></button>
@@ -276,8 +277,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const updatedExpense = {
                     name,
                     amount,
-                    date,
                     currency,
+                    date,
                     category
                 };
                 removeExpense(editingExpense);
@@ -289,8 +290,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const newExpense = {
                     name,
                     amount,
-                    date,
                     currency,
+                    date,
                     category
                 };
                 addExpense(newExpense);

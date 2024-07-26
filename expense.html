@@ -34,14 +34,15 @@
                     <input type="text" id="expense-name" placeholder="Enter Expense Name">
                     <label>Expense Amount:</label>
                     <input type="text" id="expense-amount" placeholder="Enter Expense Amount">
+                    <label>Currency</label>
+                    <input type="text" id="expense-currency" placeholder="Enter Currency">
                     <label>Select Category</label>
                     <select id="category-name">
                       <option value="Default">Default</option>
                     </select>
                     <label>Date</label>
-                    <input type="text" id="expense-date" placeholder="Enter Expense">
-                    <label>Currency</label>
-                    <input type="text" id="expense-currency" placeholder="Enter Expense">
+                    <input type="date" id="expense-date" value="2024-07-26" min="2024-01-01" max="2024-12-31" />
+                    
                     <button class="submit-" id="expense-submit-button">Set Expense Amount</button>
                 </div>
                 <div class="important-amounts-labels flex-space">
@@ -67,9 +68,9 @@
                     <tr>
                         <th>Expense</th>
                         <th>Amount</th>
+                        <th>Currency</th>
                         <th>Category</th>
                         <th>Date</th>
-                        <th>Currency</th>
                         <th>Actions</th>
                     </tr>
                 </thead>

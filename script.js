@@ -2,13 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleMenu = document.querySelector('.toggle-menu');
     const navbar = document.querySelector('.navbar');
 
-    // Verifica si los elementos existen antes de agregar el event listener
-    if (toggleMenu && navbar) {
-        toggleMenu.addEventListener('click', () => {
-            navbar.classList.toggle('active');
-        });
-    }
-
     // Presupuesto Elementos
     const budgetAmountInput = document.getElementById('budget-amount');
     const currencyInput = document.getElementById('currency');
@@ -21,7 +14,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const categorySubmitButton = document.getElementById('category-submit-button');
     const categoryList = document.getElementById('category-list');
 
-    // Verifica si los elementos existen antes de agregar el event listener
+    let editingCategory = null;  // Variable para almacenar la categoría que se está editando
+
+    if (toggleMenu && navbar) {
+        toggleMenu.addEventListener('click', () => {
+            navbar.classList.toggle('active');
+        });
+    }
+
     if (budgetSubmitButton) {
         const savedBudget = localStorage.getItem('budget');
         if (savedBudget) {
@@ -88,12 +88,10 @@ document.addEventListener('DOMContentLoaded', () => {
         editButton.classList.add('fa-solid', 'fa-pen-to-square', 'edit');
         editButton.style.fontSize = '1.2em';
         editButton.addEventListener('click', () => {
-            disableCategoryButtons(true);
-            const newCategoryName = prompt('Enter new category name:', categoryName);
-            if (newCategoryName && validateCategory(newCategoryName)) {
-                modifyCategory(categoryName, newCategoryName);
-            }
-            disableCategoryButtons(false);
+            editingCategory = categoryName;  // Establece la categoría en edición
+            categoryNameInput.value = categoryName;  // Coloca el nombre de la categoría en el input
+            categorySubmitButton.textContent = 'Edit';  // Cambia el texto del botón
+            disableCategoryButtons(true);  // Desactiva los botones mientras se edita
         });
 
         // Botón de eliminar
@@ -139,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return false;
         }
         const categories = JSON.parse(localStorage.getItem('categories')) || [];
-        if (categories.includes(name.trim())) {
+        if (categories.includes(name.trim()) && name.trim() !== editingCategory) {
             showError('Category already exists.');
             return false;
         }
@@ -154,19 +152,24 @@ document.addEventListener('DOMContentLoaded', () => {
         categorySubmitButton.addEventListener('click', () => {
             const categoryName = categoryNameInput.value.trim();
 
-            if (validateCategory(categoryName)) {
-                const categories = JSON.parse(localStorage.getItem('categories')) || [];
-                categories.push(categoryName);
-                localStorage.setItem('categories', JSON.stringify(categories));
-                createCategoryList(categoryName);
-                categoryNameInput.value = '';
+            if (editingCategory) {
+                // Si estamos editando una categoría existente
+                if (validateCategory(categoryName)) {
+                    modifyCategory(editingCategory, categoryName);
+                    categoryNameInput.value = '';
+                    categorySubmitButton.textContent = 'Set Category';  // Restaura el texto del botón
+                    editingCategory = null;  // Limpiar la categoría en edición
+                }
+            } else {
+                // Si estamos agregando una nueva categoría
+                if (validateCategory(categoryName)) {
+                    const categories = JSON.parse(localStorage.getItem('categories')) || [];
+                    categories.push(categoryName);
+                    localStorage.setItem('categories', JSON.stringify(categories));
+                    createCategoryList(categoryName);
+                    categoryNameInput.value = '';
+                }
             }
-        });
-    }
-
-    if (toggleMenu && navbar) {
-        toggleMenu.addEventListener('click', () => {
-            navbar.classList.toggle('active');
         });
     }
 

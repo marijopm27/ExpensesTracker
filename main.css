@@ -1,0 +1,160 @@
+* {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+body { 
+    background-color: rgb(242, 246, 249);
+}
+.wrapper {
+    width: 90%;
+    margin: 1em auto;
+    max-width: 80em;
+}
+
+.container {
+    width: 100%;
+} 
+
+.subcontainer {
+    width: 100%;
+    display: grid;
+   
+    grid-auto-flow: column;
+    grid-row-gap: 10px;
+}
+
+.flex {
+    display: flex;
+    align-items: center;
+}
+
+.flex-space {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+}
+
+.container input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin: 8px 0;
+    resize: vertical;
+  }
+
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+
+/* Navbar Menu */
+header {
+    position: relative;
+
+}
+.navbar {
+    background-color:#406E8E;;
+    height: 80px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+
+.navbar ul li a {
+    color: #fff;
+    text-transform: uppercase;
+    border-radius: 3px;
+    
+}
+.a:hover {
+    background-color: #253d51 ;
+    transition: .5s;
+}
+.navbar .links{
+    display: flex;
+    gap: 2rem;
+    
+}
+.navbar .toggle-menu {
+    font-size: 1.5rem;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* Budget Section */
+.budget, .important-amounts-labels{
+    background-color: #c1d2de;
+    padding: 1.25em 0.9em;
+    box-shadow: 0 0.6em 1.2em rgb(220, 226, 228);
+    margin-bottom: 20px;
+}
+.submit {
+    background-color: #406E8E;
+    border-radius: 3px;
+    border: none;
+    width: 100%;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    
+}
+div.budget >h3 {
+    text-align:left ;
+}
+
+/* HISTORY EXPENSES SECTION */
+
+/* .important-amounts-labels {
+    border-radius: 0.3em;
+    margin: 2em 0;
+    padding: 1.2em; 
+    padding: 1.25em 0.9em;
+    box-shadow: 0 0.6em 1.2em rgb(220, 226, 228);
+} 
+*/
+
+.important-amounts-labels p{
+    font-weight: 500;
+    margin-top: 0.6em;
+    margin-bottom: 0.6em;
+}
+
+.important-amounts-labels span {
+    display: block;
+    text-align: center;
+    margin-top: 0.6em;
+    margin-bottom: 0.6em;
+}
+
+
+
+
+/* Responsive */
+@media screen and (max-width: 600px) {
+    .wrapper {
+        font-size: 14px;
+    }
+    .subcontainer {
+        grid-template-columns: 1fr;
+        gap: 1em;
+    }
+    .navbar ul li a {
+        display: none;
+    }
+    .navbar .toggle-menu {
+        display: block;
+    }
+    
+}

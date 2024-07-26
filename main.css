@@ -57,6 +57,7 @@ h1 {
 }
 
 /* Navbar Menu */
+
 header {
     position: relative;
 }
@@ -70,6 +71,7 @@ header {
     align-items: center;
     justify-content: space-between;
     padding: 0 1rem;
+    position: relative;
 }
 
 .navbar .links {
@@ -85,6 +87,8 @@ header {
     justify-content: center;
     align-items: center;
     width: 100%;
+    padding: 0;
+    margin: 0;
 }
 
 .navbar ul li {
@@ -236,15 +240,22 @@ div.budget > h3 {
         grid-template-columns: 1fr;
         gap: 1em;
     }
-    .navbar ul {
+    .navbar .links {
+        display: none; /* Oculta los enlaces del menú por defecto */
+        position: absolute;
+        top: 80px; /* Ajuste basado en la altura del navbar */
+        left: 0;
+        background-color: #406E8E;
+        width: 100%;
         flex-direction: column;
-        display: none;
     }
+
+    .navbar.active .links {
+        display: flex; /* Muestra los enlaces del menú cuando la clase .active está presente */
+    }
+
     .navbar ul li {
         margin: 1rem 0;
-    }
-    .navbar.active ul {
-        display: flex;
     }
     .navbar .toggle-menu {
         display: block;

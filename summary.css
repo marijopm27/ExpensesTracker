@@ -162,7 +162,7 @@
 
 .summary-chart {
     width: 80%; /* Ajustar el ancho al 80% del contenedor padre */
-    height: 400px; /* Ajustar la altura según sea necesario */
+    height: 500px; /* Ajustar la altura según sea necesario */
 }
 
 .Chart {

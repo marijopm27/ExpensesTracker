@@ -70,15 +70,17 @@ async function convertAmountToBudgetCurrency(amount, currency, savedCurrency, da
 
     return amountInBudgetCurrency;
 }
+function updatePieChart(filteredExpenses) {
+    const expensesData = filteredExpenses.map(expense => ({
+        label: `${expense.category} (${expense.date})`,
+        amount: parseFloat(expense.amount)
+    }));
 
-function updatePieChart(expenses) {
-    const categories = {};
-    expenses.forEach(expense => {
-        if (!categories[expense.category]) {
-            categories[expense.category] = 0;
-        }
-        categories[expense.category] += parseFloat(expense.amount);
-    });
+    const labels = expensesData.map(expense => expense.label);
+    const data = expensesData.map(expense => expense.amount);
+
+    console.log('Labels:', labels);
+    console.log('Data:', data);
 
     const ctx = document.getElementById('myPieChart').getContext('2d');
 
@@ -87,13 +89,19 @@ function updatePieChart(expenses) {
         pieChart.destroy();
     }
 
+    // Verificar que los datos no estén vacíos
+    if (data.length === 0) {
+        console.warn('No expenses to display in the pie chart.');
+        return;
+    }
+
     // Crear un nuevo gráfico
     pieChart = new Chart(ctx, {
         type: 'pie',
         data: {
-            labels: Object.keys(categories),
+            labels: labels,
             datasets: [{
-                data: Object.values(categories),
+                data: data,
                 backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40']
             }]
         },

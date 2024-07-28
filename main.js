@@ -27,6 +27,9 @@ function updateTotalExpensesAndBudgetLeft() {
     localStorage.setItem('budget-left', budgetAmount.toFixed(2));
 }
 
+
+
+
 // Document ready function
 document.addEventListener('DOMContentLoaded', function() {
     const toggleMenu = document.querySelector('.toggle-menu');

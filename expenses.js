@@ -5,14 +5,11 @@ const expenseCurrencyInput = document.getElementById('expense-currency');
 const expenseSubmitButton = document.getElementById('expense-submit-button');
 const tableExpense = document.getElementById('table-expense');
 
-
-
 let editingExpense = null;
 
 function loadExpenses() {
     const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
     console.log('Gastos cargados:', expenses);
-    console.log('k');
 
     if (tableExpense) {
         tableExpense.innerHTML = '';
@@ -85,25 +82,43 @@ function createExpenseRowSumary(expense) {
 
 function validateExpenseInput(amount, currency, date, category) {
     if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
-        showError('Please enter a valid expense amount.');
+        alert('Please enter a valid expense amount.');
         return false;
     }
     if (currency !== 'dollars' && currency !== 'colones') {
-        showError('Currency must be either "dollars" or "colones".');
+        alert('Currency must be either "dollars" or "colones".');
         return false;
     }
     if (!date) {
-        showError('Please select a date.');
+        alert('Please select a date.');
         return false;
     }
     if (!category) {
-        showError('Please create a category first');
+        alert('Please create a category first');
+        return false;
+    }
+    return true;
+}
+
+function validateExpenseLimit(amount) {
+    const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+    let totalExpense = 0;
+    expenses.forEach(expense => {
+        totalExpense += parseFloat(expense.amount);
+    });
+    const limit = parseFloat(localStorage.getItem('budget-limit')) || 0;
+    if (amount > limit && (totalExpense +amount)> limit) {
+        alert('Warning: Expense exceeds budget limit.');
         return false;
     }
     return true;
 }
 
 function addExpense(expense) {
+    if (!validateExpenseLimit(parseFloat(expense.amount))) {
+        return;
+    }
+
     const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
     expenses.push(expense);
     localStorage.setItem('expenses', JSON.stringify(expenses));
@@ -160,5 +175,4 @@ if (expenseSubmitButton) {
         expenseDateInput.value = '';
         expenseCurrencyInput.value = '';
     });
-
 }

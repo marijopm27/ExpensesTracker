@@ -1,0 +1,110 @@
+/* Expense Section */
+.expense {
+    background-color: #c1d2de;
+    padding: 1.25em 0.9em;
+    
+    margin-bottom: 20px;
+}
+
+.expense h2 {
+    text-align: center;
+}
+
+.expense label {
+    display: block;
+    margin-bottom: 0.5em;
+}
+
+.expense input[type=text],
+.expense select {
+    width: 100%;
+    padding: 0.75em;
+    margin-bottom: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.expense button {
+    width: 100%;
+    padding: 0.75em;
+    background-color: #406E8E;
+    border: none;
+    color: white;
+    border-radius: 4px;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.expense button:hover {
+    background-color: #253d51;
+}
+
+.sumary-table {
+    
+    padding: 1.25em 0.9em;
+    
+    margin-bottom: 20px;
+}
+
+#expense-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#expense-table thead {
+    background-color: #406E8E;
+    color: white;
+}
+
+#expense-table th, #expense-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center; 
+}
+#expense-table th {
+    background-color: #253d51;
+}
+
+#expense-table tbody tr:nth-child(odd) {
+    background-color: #f2f6f9;
+}
+
+#expense-table tbody tr:nth-child(even) {
+    background-color: #e5e9ec;
+}
+
+#expense-table td {
+    vertical-align: middle;
+}
+
+
+#expense-table-sumary {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#expense-table-sumary thead {
+    background-color: #406E8E;
+    color: white;
+}
+
+#expense-table-sumary th, #expense-table-sumary td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center; 
+}
+#expense-table-sumary th {
+    background-color: #253d51;
+}
+
+#expense-table-sumary tbody tr:nth-child(odd) {
+    background-color: #f2f6f9;
+}
+
+#expense-table-sumary tbody tr:nth-child(even) {
+    background-color: #e5e9ec;
+}
+
+#expense-table-sumary td {
+    vertical-align: middle;
+}

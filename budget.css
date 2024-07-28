@@ -1,0 +1,45 @@
+/* Budget Section */
+.budget, .important-amounts-budget {
+    background-color: #c1d2de;
+    padding: 1.25em 0.9em;
+    
+    margin-bottom: 20px;
+}
+.important-amounts-budget p {
+    font-weight: 500;
+    margin-top: 0.6em;
+    margin-bottom: 0.6em;
+    font-size: 20px;
+}
+
+.important-amounts-budget span {
+    display: block;
+    text-align: center;
+    margin-top: 0.6em;
+    margin-bottom: 0.6em;
+    font-size: 20px;
+}
+.submit {
+    background-color: #406E8E;
+    border-radius: 3px;
+    border: none;
+    width: 100%;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+div.budget > h3 {
+    text-align: left;
+}
+.budget input[type=text],
+.budget select {
+    width: 100%;
+    padding: 0.75em;
+    margin-bottom: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}

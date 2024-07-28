@@ -1,0 +1,99 @@
+/* Category Section */
+.category {
+    background-color: #c1d2de;
+    padding: 1.25em 0.9em;
+    
+    margin-bottom: 20px;
+}
+
+.category, .important-amounts-budget {
+    width: 100%;
+    background-color: #c1d2de;
+    padding: 1.25em 0.9em;
+    
+    margin-bottom: 20px;
+    
+}
+
+.category h2, .important-amounts-budget p {
+    text-align: center;
+}
+
+.category label, .important-amounts-budget span {
+    display: block;
+    margin-bottom: 0.5em;
+    text-align: center;
+}
+
+.category input[type=text], .important-amounts-budget input[type=text], [type=date] {
+    width: 100%;
+    padding: 0.75em;
+    margin-bottom: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.category button, .important-amounts-budget button {
+    width: 100%;
+    padding: 0.75em;
+    background-color: #406E8E;
+    border: none;
+    color: white;
+    border-radius: 4px;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.category button:hover, .important-amounts-budget button:hover {
+    background-color: #253d51;
+}
+
+/* Category List Summary */
+.category-list-summary {
+    padding: 1.25em 0.9em;
+    
+    margin-bottom: 20px;
+}
+
+#category-table thead {
+    background-color: #406E8E;
+    color: white;
+}
+
+#category-table tbody tr:nth-child(odd) {
+    background-color: #f2f6f9;
+}
+
+#category-table tbody tr:nth-child(even) {
+    background-color: #e5e9ec; 
+}
+
+
+#category-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+
+#category-table th, #category-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+}
+
+#category-table th {
+    background-color: #253d51;
+}
+
+
+#category-table td {
+    vertical-align: middle;
+}
+
+
+#category-table button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 1.2em; 
+}

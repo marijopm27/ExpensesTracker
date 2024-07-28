@@ -23,7 +23,7 @@ let editingCategory = null;
     localStorage.setItem('expenses', JSON.stringify(expenses));
 
     // Actualizar la interfaz con los gastos eliminados
-    updateTotalExpensesAndBudgetLeft();
+    getAndDisplayLocalStorageValues();
 
     // Ajustar el presupuesto restante
     updateBudgetLeft(totalAmountToSubtract, 'dollars'); // Asume 'dollars'; cambiar si necesario
@@ -111,7 +111,7 @@ function updateExpensesCategory(oldName, newName) {
         return expense;
     });
     localStorage.setItem('expenses', JSON.stringify(expenses));
-    updateTotalExpensesAndBudgetLeft();
+    getAndDisplayLocalStorageValues();
 }
 
 function validateCategory(name) {

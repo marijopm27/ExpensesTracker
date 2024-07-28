@@ -38,6 +38,7 @@ async function fetchExchangeRate(date) {
 async function updateTotalExpensesAndBudgetLeft() {
     const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
     const savedCurrency = localStorage.getItem('budget-currency') || 'dollars';
+    const savedLimit = localStorage.getItem('budget-limit');
     let totalExpense = 0;
 
     for (const expense of expenses) {
@@ -57,28 +58,37 @@ async function updateTotalExpensesAndBudgetLeft() {
     const budgetLeft = budgetAmount - totalExpense;
     budgetLeftSpan.textContent = currencySymbol + budgetLeft.toFixed(2);
     totalBudgetSpan.textContent = currencySymbol + budgetAmount.toFixed(2);
+    budgetLimitSpan.textContent = currencySymbol + (parseFloat(localStorage.getItem('budget-limit')) || 0).toFixed(2);
     
     localStorage.setItem('total-expenses', totalExpense.toFixed(2));
-    localStorage.setItem('budget-left', budgetAmount.toFixed(2));
+    localStorage.setItem('budget-left', budgetLeft.toFixed(2));
 }
 
-
-
+function getAndDisplayLocalStorageValues() {
+    const savedBudget = localStorage.getItem('budget');
+    const savedCurrency = localStorage.getItem('budget-currency');
+    const savedLimit = localStorage.getItem('budget-limit');
+    const budgetAmount = parseFloat(savedBudget) || 0;
+    const currencySymbol = savedCurrency === 'dollars' ? '$' : '₡';
+    console.log(savedLimit);
+    totalBudgetSpan.textContent = currencySymbol + budgetAmount.toFixed(2);
+    budgetLeftSpan.textContent = currencySymbol + (parseFloat(localStorage.getItem('budget-left')) || 0).toFixed(2);
+    totalExpenseSpan.textContent = currencySymbol + (parseFloat(localStorage.getItem('total-expenses')) || 0).toFixed(2);
+    budgetLimitSpan.textContent = currencySymbol + (parseFloat(localStorage.getItem('budget-limit')) || 0).toFixed(2);
+}
 
 // Document ready function
 document.addEventListener('DOMContentLoaded', function() {
     const toggleMenu = document.querySelector('.toggle-menu');
     const navbar = document.querySelector('.navbar');
-    const budgetAmountInput = document.getElementById('budget-amount');
-    const currencyInput = document.getElementById('budget-currency');
-    const budgetSubmitButton = document.getElementById('budget-submit-button');
     const totalBudgetSpan = document.getElementById('total-budget');
     const budgetLeftSpan = document.getElementById('budget-left');
     const totalExpenseSpan = document.getElementById('total-expenses');
-    const tableExpenseSumary = document.getElementById('table-expense-sumary');
+    const budgetLimitSpan = document.getElementById('budget-limit');
     window.totalExpenseSpan = totalExpenseSpan;
     window.totalBudgetSpan = totalBudgetSpan;
     window.budgetLeftSpan = budgetLeftSpan;
+    window.budgetLimitSpan = budgetLimitSpan;
     window.updateTotalExpensesAndBudgetLeft = updateTotalExpensesAndBudgetLeft;
     window.updateBudgetLeft = updateBudgetLeft;
 

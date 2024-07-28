@@ -24,7 +24,7 @@ function loadExpenses() {
         });
     }
 
-    updateTotalExpensesAndBudgetLeft();
+    getAndDisplayLocalStorageValues();
 }
 
 function createExpenseRow(expense) {
@@ -108,29 +108,12 @@ async function validateExpenseLimit(amount, currency, date) {
 
     for (const expense of expenses) {
         const exchangeRate = await fetchExchangeRate(expense.date);
-        let amountInBudgetCurrency;
-
-        if (expense.currency === savedCurrency) {
-            amountInBudgetCurrency = parseFloat(expense.amount);
-        } else if (savedCurrency === 'dollars' && expense.currency === 'colones') {
-            amountInBudgetCurrency = parseFloat(expense.amount) / exchangeRate;
-        } else if (savedCurrency === 'colones' && expense.currency === 'dollars') {
-            amountInBudgetCurrency = parseFloat(expense.amount) * exchangeRate;
-        }
-
+        const amountInBudgetCurrency = convertAmount(parseFloat(expense.amount), expense.currency, savedCurrency, exchangeRate);
         totalExpense += amountInBudgetCurrency;
     }
 
     const newExpenseExchangeRate = await fetchExchangeRate(date);
-    let newExpenseInBudgetCurrency;
-
-    if (currency === savedCurrency) {
-        newExpenseInBudgetCurrency = amount;
-    } else if (savedCurrency === 'dollars' && currency === 'colones') {
-        newExpenseInBudgetCurrency = amount / newExpenseExchangeRate;
-    } else if (savedCurrency === 'colones' && currency === 'dollars') {
-        newExpenseInBudgetCurrency = amount * newExpenseExchangeRate;
-    }
+    const newExpenseInBudgetCurrency = convertAmount(amount, currency, savedCurrency, newExpenseExchangeRate);
 
     if ((totalExpense + newExpenseInBudgetCurrency) > limit) {
         alert('Warning: Expense exceeds budget limit.');
@@ -140,8 +123,22 @@ async function validateExpenseLimit(amount, currency, date) {
     return true;
 }
 
-function addExpense(expense) {
-    if (!validateExpenseLimit(parseFloat(expense.amount, expense.currency, expense.date))) {
+function convertAmount(amount, fromCurrency, toCurrency, exchangeRate) {
+    if (fromCurrency === toCurrency) {
+        return amount;
+    }
+    if (fromCurrency === 'dollars' && toCurrency === 'colones') {
+        return amount * exchangeRate;
+    }
+    if (fromCurrency === 'colones' && toCurrency === 'dollars') {
+        return amount / exchangeRate;
+    }
+    return amount;
+}
+
+async function addExpense(expense) {
+    const isValid = await validateExpenseLimit(parseFloat(expense.amount), expense.currency, expense.date);
+    if (!isValid) {
         return;
     }
 
@@ -163,9 +160,9 @@ function removeExpense(expenseToRemove) {
 }
 
 if (expenseSubmitButton) {
-    expenseSubmitButton.addEventListener('click', () => {
+    expenseSubmitButton.addEventListener('click', async () => {
         const name = expenseNameInput.value.trim();
-        const amount = expenseAmountInput.value;
+        const amount = parseFloat(expenseAmountInput.value);
         const date = expenseDateInput.value;
         const currency = expenseCurrencyInput.value.toLowerCase();
         const category = categoryDropdown.value;
@@ -182,8 +179,8 @@ if (expenseSubmitButton) {
                 date,
                 category
             };
-            removeExpense(editingExpense);
-            addExpense(updatedExpense);
+            await removeExpense(editingExpense);
+            await addExpense(updatedExpense);
             expenseSubmitButton.textContent = 'Add Expense';
             editingExpense = null;
         } else {
@@ -194,7 +191,7 @@ if (expenseSubmitButton) {
                 date,
                 category
             };
-            addExpense(newExpense);
+            await addExpense(newExpense);
         }
 
         expenseNameInput.value = '';

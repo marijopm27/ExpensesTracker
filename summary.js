@@ -7,6 +7,7 @@ const budgetLimitInput = document.getElementById('budget-limit');
 const budgetSubmitButton = document.getElementById('budget-submit-button');
 const totalBudgetSpan = document.getElementById('total-budget');
 const budgetLeftSpan = document.getElementById('budget-left');
+const budgetLimitSpan = document.getElementById('budget-limit');
 const totalExpenseSpan = document.getElementById('total-expenses');
 const tableExpenseSumary = document.getElementById('table-expense-sumary');
 
@@ -22,6 +23,7 @@ if (savedBudget) {
 function updateBudget(amount, currency, limit) {
     totalBudgetSpan.textContent = (currency === 'dollars' ? '$' : '₡') + amount;
     budgetLeftSpan.textContent = (currency === 'dollars' ? '$' : '₡') + amount;
+    budgetLimitSpan.textContent = (currency === 'dollars' ? '$' : '₡')  + limit;
     localStorage.setItem('budget', amount);
     localStorage.setItem('budget-currency', currency);
     localStorage.setItem('budget-limit', limit);

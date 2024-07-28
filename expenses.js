@@ -72,10 +72,12 @@ function createExpenseRowSumary(expense) {
 
     row.innerHTML = `
         <td>${expense.name}</td>
-        <td>${currencySymbol} ${expense.amount}</td>
-        <td>${currencySymbol}</td>
         <td>${expense.category}</td>
+        
+        <td>${currencySymbol}</td>
+        
         <td>${expense.date}</td>
+        <td>${currencySymbol} ${expense.amount}</td>
     `;
     tableExpenseSumary.appendChild(row);
 }

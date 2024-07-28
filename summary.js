@@ -29,6 +29,39 @@ function updateBudget(amount, currency, limit) {
     localStorage.setItem('budget-limit', limit);
 }
 
+let pieChart = null; // Variable para almacenar el gráfico actual
+
+function updatePieChart(expenses) {
+    const categories = {};
+    expenses.forEach(expense => {
+        if (!categories[expense.category]) {
+            categories[expense.category] = 0;
+        }
+        categories[expense.category] += parseFloat(expense.amount);
+    });
+
+    const ctx = document.getElementById('myPieChart').getContext('2d');
+
+    // Destruir el gráfico existente si ya está definido
+    if (pieChart) {
+        pieChart.destroy();
+    }
+
+    // Crear un nuevo gráfico
+    pieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: Object.keys(categories),
+            datasets: [{
+                data: Object.values(categories),
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40']
+            }]
+        },
+        options: {
+            responsive: true,
+        }
+    });
+}
 function validateInput(amount, currency, limit) {
     if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
         alert('Please enter a valid budget amount.');
@@ -99,5 +132,9 @@ function filterExpenses(category, date) {
         if (tableExpenseSumary) {
             createExpenseRowSumary(expense);
         }
+
+    
     });
+    console.log(filteredExpenses);
+    updatePieChart(filteredExpenses);
 }

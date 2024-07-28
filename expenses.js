@@ -23,7 +23,7 @@ function loadExpenses() {
             createExpenseRowSumary(expense);
         });
     }
-
+    updatePieChart(expenses);
     getAndDisplayLocalStorageValues();
 }
 

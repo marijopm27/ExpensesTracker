@@ -11,18 +11,53 @@ function updateBudgetLeft(amount, currency) {
     budgetLeftSpan.textContent = (currency === 'dollars' ? '$' : '₡') + newBudgetLeft.toFixed(2);
 }
 
-function updateTotalExpensesAndBudgetLeft() {
+const exchangeRateCache = {};
+
+async function fetchExchangeRate(date) {
+    if (exchangeRateCache[date]) {
+        return exchangeRateCache[date];
+    }
+
+    try {
+        const response = await fetch(`https://tipodecambio.paginasweb.cr/api/${date}`);
+        if (!response.ok) {
+            throw new Error('Error fetching exchange rate');
+        }
+        const data = await response.json();
+        const exchangeRate = data.compra;
+        exchangeRateCache[date] = exchangeRate;
+        return exchangeRate;
+    } catch (error) {
+        console.error(`Failed to fetch exchange rate for ${date}:`, error);
+        // Puedes usar una tasa de cambio predeterminada en caso de error
+        const defaultExchangeRate = 570; // Ejemplo de tasa de cambio predeterminada
+        return defaultExchangeRate;
+    }
+}
+
+async function updateTotalExpensesAndBudgetLeft() {
     const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+    const savedCurrency = localStorage.getItem('budget-currency') || 'dollars';
     let totalExpense = 0;
-    expenses.forEach(expense => {
-        totalExpense += parseFloat(expense.amount);
-    });
-    const currency = expenses[0] ? expenses[0].currency : 'dollars'; // Assume all expenses have the same currency
-    totalExpenseSpan.textContent = (currency === 'dollars' ? '$' : '₡') + totalExpense.toFixed(2);
+
+    for (const expense of expenses) {
+        const exchangeRate = await fetchExchangeRate(expense.date);
+        const amountInBudgetCurrency = expense.currency === savedCurrency 
+            ? parseFloat(expense.amount)
+            : expense.currency === 'dollars'
+                ? parseFloat(expense.amount) * (savedCurrency === 'dollars' ? 1 : exchangeRate)
+                : parseFloat(expense.amount) / (savedCurrency === 'colones' ? 1 : exchangeRate);
+        totalExpense += amountInBudgetCurrency;
+    }
+
+    const currencySymbol = savedCurrency === 'dollars' ? '$' : '₡';
+    totalExpenseSpan.textContent = currencySymbol + totalExpense.toFixed(2);
+    
     const budgetAmount = parseFloat(totalBudgetSpan.textContent.replace(/[^\d.-]/g, '')) || 0;
     const budgetLeft = budgetAmount - totalExpense;
-    budgetLeftSpan.textContent = (currency === 'dollars' ? '$' : '₡') + budgetLeft.toFixed(2);
-    totalBudgetSpan.textContent = (currency === 'dollars' ? '$' : '₡') + budgetAmount.toFixed(2);
+    budgetLeftSpan.textContent = currencySymbol + budgetLeft.toFixed(2);
+    totalBudgetSpan.textContent = currencySymbol + budgetAmount.toFixed(2);
+    
     localStorage.setItem('total-expenses', totalExpense.toFixed(2));
     localStorage.setItem('budget-left', budgetAmount.toFixed(2));
 }

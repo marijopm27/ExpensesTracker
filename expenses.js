@@ -100,22 +100,48 @@ function validateExpenseInput(amount, currency, date, category) {
     return true;
 }
 
-function validateExpenseLimit(amount) {
+async function validateExpenseLimit(amount, currency, date) {
     const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
-    let totalExpense = 0;
-    expenses.forEach(expense => {
-        totalExpense += parseFloat(expense.amount);
-    });
+    const savedCurrency = localStorage.getItem('budget-currency') || 'dollars';
     const limit = parseFloat(localStorage.getItem('budget-limit')) || 0;
-    if (amount > limit && (totalExpense +amount)> limit) {
+    let totalExpense = 0;
+
+    for (const expense of expenses) {
+        const exchangeRate = await fetchExchangeRate(expense.date);
+        let amountInBudgetCurrency;
+
+        if (expense.currency === savedCurrency) {
+            amountInBudgetCurrency = parseFloat(expense.amount);
+        } else if (savedCurrency === 'dollars' && expense.currency === 'colones') {
+            amountInBudgetCurrency = parseFloat(expense.amount) / exchangeRate;
+        } else if (savedCurrency === 'colones' && expense.currency === 'dollars') {
+            amountInBudgetCurrency = parseFloat(expense.amount) * exchangeRate;
+        }
+
+        totalExpense += amountInBudgetCurrency;
+    }
+
+    const newExpenseExchangeRate = await fetchExchangeRate(date);
+    let newExpenseInBudgetCurrency;
+
+    if (currency === savedCurrency) {
+        newExpenseInBudgetCurrency = amount;
+    } else if (savedCurrency === 'dollars' && currency === 'colones') {
+        newExpenseInBudgetCurrency = amount / newExpenseExchangeRate;
+    } else if (savedCurrency === 'colones' && currency === 'dollars') {
+        newExpenseInBudgetCurrency = amount * newExpenseExchangeRate;
+    }
+
+    if ((totalExpense + newExpenseInBudgetCurrency) > limit) {
         alert('Warning: Expense exceeds budget limit.');
         return false;
     }
+
     return true;
 }
 
 function addExpense(expense) {
-    if (!validateExpenseLimit(parseFloat(expense.amount))) {
+    if (!validateExpenseLimit(parseFloat(expense.amount, expense.currency, expense.date))) {
         return;
     }
 
@@ -125,6 +151,7 @@ function addExpense(expense) {
     createExpenseRow(expense);
     updateTotalExpense(parseFloat(expense.amount), expense.currency);
     updateBudgetLeft(-parseFloat(expense.amount), expense.currency);
+    updateTotalExpensesAndBudgetLeft();
 }
 
 function removeExpense(expenseToRemove) {

@@ -158,9 +158,6 @@ if (categorySubmitButton) {
         }
     });
 }
-
-
-
 // Expense Section
 function populateCategoryDropdown() {
 const categories = JSON.parse(localStorage.getItem('categories')) || [];

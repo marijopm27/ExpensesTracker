@@ -138,3 +138,5 @@ function filterExpenses(category, date) {
     console.log(filteredExpenses);
     updatePieChart(filteredExpenses);
 }
+
+

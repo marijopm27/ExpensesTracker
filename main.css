@@ -11,6 +11,7 @@ body {
     -webkit-tap-highlight-color: transparent;
 }
 
+
 .wrapper {
     width: 90%;
     margin: 1em auto;
@@ -162,7 +163,7 @@ header {
 /* Category List Summary */
 .category-list-summary {
     padding: 1.25em 0.9em;
-    box-shadow: 0 0.6em 1.2em rgb(220, 226, 228);
+    
     margin-bottom: 20px;
 }
 
@@ -253,7 +254,7 @@ header {
 .sumary-table {
     
     padding: 1.25em 0.9em;
-    box-shadow: 0 0.6em 1.2em rgb(220, 226, 228);
+    
     margin-bottom: 20px;
 }
 
@@ -479,6 +480,102 @@ div.budget > h3 {
     transition: all 400ms ease;
 }
 
+/* Dark Mode*/
+
+.dark-mode {
+    background-color: #434753;
+    color: #e0e0e0;
+}
+#sun-icon {
+    display: none;
+}
+
+#toggle-dark-mode {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    color: #a0bbce;
+}
+
+#toggle-dark-mode:hover {
+    color: #253d51;
+}
+
+
+.dark-mode #sun-icon {
+    display: block;
+}
+
+.dark-mode #moon-icon {
+    display: none;
+}
+
+.dark-mode .navbar {
+    background-color: #678a9a;
+}
+
+.dark-mode .category,
+.dark-mode .expense,
+.dark-mode .budget,
+.dark-mode .important-amounts-budget,
+.dark-mode .important-amounts-labels {
+    background-color: #7e8997;
+}
+
+.dark-mode #category-table,
+.dark-mode #expense-table,
+.dark-mode #expense-table-sumary {
+    border-color: #b2afa4;
+}
+
+.dark-mode #category-table th,
+.dark-mode #expense-table th,
+.dark-mode #expense-table-sumary th {
+    background-color: #505e6f;
+}
+
+.dark-mode #category-table tbody tr:nth-child(odd),
+.dark-mode #expense-table tbody tr:nth-child(odd),
+.dark-mode #expense-table-sumary tbody tr:nth-child(odd) {
+    background-color: #616576;
+}
+
+.dark-mode #category-table tbody tr:nth-child(even),
+.dark-mode #expense-table tbody tr:nth-child(even),
+.dark-mode #expense-table-sumary tbody tr:nth-child(even) {
+    background-color: #363f50;
+}
+
+.dark-mode .filter-form {
+    background-color: #2c2c2c;
+}
+
+.dark-mode .filter-form select,
+.dark-mode .filter-form input[type="date"],
+.dark-mode .filter-form button {
+    border: 1px solid #444;
+}
+
+.dark-mode .submit {
+    background-color: #1e1e1e;
+}
+
+.dark-mode .submit:hover {
+    background-color: #333;
+}
+
+.dark-mode .chart-heading{
+    color: #b7c9d2;
+}
+.dark-mode .Chart{
+    background-color: #adbdc5;
+}
+
+.dark-mode .edit,
+.dark-mode .delete {
+    color: #dddbc9;
+}
 /* Responsive */
 @media screen and (max-width: 768px) {
     .wrapper {

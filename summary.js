@@ -31,6 +31,46 @@ function updateBudget(amount, currency, limit) {
 
 let pieChart = null; // Variable para almacenar el gráfico actual
 
+async function calculateCategoryTotals(expenses, savedCurrency) {
+    const categoryTotals = {};
+    const exchangeRates = {};
+
+    // Iterar sobre los gastos para calcular los totales por categoría
+    for (const expense of expenses) {
+        const { category, amount, currency, date } = expense;
+        const amountInBudgetCurrency = await convertAmountToBudgetCurrency(amount, currency, savedCurrency, date, exchangeRates);
+
+        if (!categoryTotals[category]) {
+            categoryTotals[category] = 0;
+        }
+        categoryTotals[category] += amountInBudgetCurrency;
+    }
+
+    return categoryTotals;
+}
+
+async function convertAmountToBudgetCurrency(amount, currency, savedCurrency, date, exchangeRates) {
+    if (!exchangeRates[date]) {
+        exchangeRates[date] = await fetchExchangeRate(date);
+    }
+
+    let amountInBudgetCurrency;
+
+    if (currency === savedCurrency) {
+        amountInBudgetCurrency = parseFloat(amount);
+    } else if (currency === 'dollars' && savedCurrency === 'colones') {
+        amountInBudgetCurrency = parseFloat(amount) * exchangeRates[date];
+    } else if (currency === 'colones' && savedCurrency === 'dollars') {
+        amountInBudgetCurrency = parseFloat(amount) / exchangeRates[date];
+    } else {
+        // Handle cases where currencies might not match
+        console.warn('Unhandled currency conversion:', currency, savedCurrency);
+        amountInBudgetCurrency = parseFloat(amount); // Fallback to amount without conversion
+    }
+
+    return amountInBudgetCurrency;
+}
+
 function updatePieChart(expenses) {
     const categories = {};
     expenses.forEach(expense => {
@@ -105,7 +145,7 @@ applyFiltersButton.addEventListener('click', () => {
     filterExpenses(selectedCategory, selectedDate);
 });
 
-function filterExpenses(category, date) {
+async function filterExpenses(category, date) {
     const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
     let filteredExpenses = expenses;
 
@@ -117,26 +157,32 @@ function filterExpenses(category, date) {
         filteredExpenses = filteredExpenses.filter(expense => expense.date === date);
     }
 
-    if (tableExpense) {
-        tableExpense.innerHTML = '';
-    }
-
     if (tableExpenseSumary) {
         tableExpenseSumary.innerHTML = '';
     }
 
+    const savedCurrency = localStorage.getItem('budget-currency') || 'dollars';
+    const categoryTotals = await calculateCategoryTotals(filteredExpenses, savedCurrency);
+
     filteredExpenses.forEach(expense => {
-        if (tableExpense) {
-            createExpenseRow(expense);
-        }
         if (tableExpenseSumary) {
             createExpenseRowSumary(expense);
         }
-
-    
     });
-    console.log(filteredExpenses);
+
+    if (tableExpenseSumary) {
+        addTotalRow(categoryTotals);
+    }
+
     updatePieChart(filteredExpenses);
 }
 
+function addTotalRow(categoryTotals) {
+    let totalRow = document.createElement('tr');
+    totalRow.innerHTML = `
+        <td colspan="4">Total</td>
+        <td>${Object.values(categoryTotals).reduce((a, b) => a + b, 0).toFixed(2)}</td>
+    `;
+    tableExpenseSumary.appendChild(totalRow);
+}
 

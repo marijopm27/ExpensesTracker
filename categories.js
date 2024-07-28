@@ -173,4 +173,13 @@ if (categoryDropdown) {
         categoryDropdown.appendChild(option);
     });
 }
+if (filterCategory) {
+    filterCategory.innerHTML = '<option value="">All Categories</option>';
+    categories.forEach(category => {
+        let option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        filterCategory.appendChild(option);
+    });
+}
 }

@@ -59,3 +59,43 @@ if (budgetSubmitButton) {
         }
     });
 }
+
+const filterCategory = document.getElementById('filter-category');
+const filterDate = document.getElementById('filter-date');
+const applyFiltersButton = document.getElementById('apply-filters');
+
+applyFiltersButton.addEventListener('click', () => {
+    const selectedCategory = filterCategory.value;
+    const selectedDate = filterDate.value;
+    filterExpenses(selectedCategory, selectedDate);
+});
+
+function filterExpenses(category, date) {
+    const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+    let filteredExpenses = expenses;
+
+    if (category) {
+        filteredExpenses = filteredExpenses.filter(expense => expense.category === category);
+    }
+
+    if (date) {
+        filteredExpenses = filteredExpenses.filter(expense => expense.date === date);
+    }
+
+    if (tableExpense) {
+        tableExpense.innerHTML = '';
+    }
+
+    if (tableExpenseSumary) {
+        tableExpenseSumary.innerHTML = '';
+    }
+
+    filteredExpenses.forEach(expense => {
+        if (tableExpense) {
+            createExpenseRow(expense);
+        }
+        if (tableExpenseSumary) {
+            createExpenseRowSumary(expense);
+        }
+    });
+}

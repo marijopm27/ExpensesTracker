@@ -44,6 +44,17 @@
                 </div>
             </div>
         </div>
+        <div class="filter-form">
+            <label for="filter-category">Filter by Category:</label>
+            <select id="filter-category">
+                <option value="">All Categories</option>
+                <!-- Dynamically populate categories here -->
+            </select>
+            <label for="filter-date">Filter by Date:</label>
+            <input type="date" id="filter-date">
+            <button id="apply-filters">Apply Filters</button>
+        </div>
+        
         <div class="sumary-table">
             <h3>Summary Expense</h3>
             <table id="expense-table">

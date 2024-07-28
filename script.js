@@ -29,82 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const expenseSubmitButton = document.getElementById('expense-submit-button');
     const tableExpense = document.getElementById('table-expense');
     const tableExpenseSumary = document.getElementById('table-expense-sumary');
-    const ctx = document.getElementById('myPieChart')?.getContext('2d');
-    if (ctx) {
-        const expenses = getExpensesFromLocalStorage();
-        const categoryTotals = aggregateExpensesByCategory(expenses);
-        const labels = Object.keys(categoryTotals);
-        const data = Object.values(categoryTotals);
-        const backgroundColors = getColorsArray(labels.length);
-
-        createPieChart(ctx, labels, data, backgroundColors);
-    } else {
-        console.error('El elemento canvas no se encontró en el DOM');
-    }
-
-    let editingCategory = null;
-    let editingExpense = null;
-
-    function createPieChart(ctx, labels, data, backgroundColors) {
-        return new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: labels,
-                datasets: [{
-                    data: data,
-                    backgroundColor: backgroundColors
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    tooltip: {
-                        enabled: true
-                    }
-                }
-            }
-        });
-    }
-
-    function getExpensesFromLocalStorage() {
-        const expenses = localStorage.getItem('expenses');
-        return expenses ? JSON.parse(expenses) : [];
-    }
-
-    function aggregateExpensesByCategory(expenses) {
-        const categoryTotals = {};
-        expenses.forEach(expense => {
-            if (categoryTotals[expense.category]) {
-                categoryTotals[expense.category] += parseFloat(expense.amount);
-            } else {
-                categoryTotals[expense.category] = parseFloat(expense.amount);
-            }
-        });
-        return categoryTotals;
-    }
-
-    function getRandomColor() {
-        const letters = '0123456789ABCDEF';
-        let color = '#';
-        for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
-    }
-
-    function getColorsArray(length) {
-        const colors = [];
-        for (let i = 0; i < length; i++) {
-            colors.push(getRandomColor());
-        }
-        return colors;
-    }
-
     
-
     // Budget Section
     const savedBudget = localStorage.getItem('budget');
     const SavedCurrency = localStorage.getItem('budget-currency');
@@ -144,6 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.setItem('budget', budgetAmount);
                 localStorage.setItem('budget-currency', currency);
                 updateBudget(budgetAmount,currency);
+                updateTotalExpensesAndBudgetLeft();
                 budgetSubmitButton.textContent = 'Update Budget';
                 budgetAmountInput.value = '';
                 currencyInput.value = '';
@@ -294,8 +220,9 @@ document.addEventListener('DOMContentLoaded', function() {
             tableExpenseSumary.innerHTML = '';
             expenses.forEach(expense => {
                 createExpenseRowSumary(expense);
-                createPieChart(ctx,labels,data,backgroundColors);
+                
             });
+            
         }
         
         updateTotalExpensesAndBudgetLeft();
@@ -422,7 +349,7 @@ document.addEventListener('DOMContentLoaded', function() {
         updateTotalExpensesAndBudgetLeft();
 
         // Ajustar el presupuesto restante
-        updateBudgetLeft(totalAmountToSubtract, 'dollars'); // Asume 'dollars'; cambiar si necesario
+        updateBudgetLeft(totalAmountToSubtract, currency); // Asume 'dollars'; cambiar si necesario
     }
 
     function updateTotalExpensesAndBudgetLeft() {

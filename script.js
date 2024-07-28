@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    //Budget Elements
     const budgetAmountInput = document.getElementById('budget-amount');
     const currencyInput = document.getElementById('budget-currency');
     const budgetSubmitButton = document.getElementById('budget-submit-button');
@@ -15,10 +16,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const budgetLeftSpan = document.getElementById('budget-left');
     const totalExpenseSpan = document.getElementById('total-expenses');
 
+    //Category Elements
     const categoryNameInput = document.getElementById('category-name');
     const categorySubmitButton = document.getElementById('category-submit-button');
     const categoryDropdown = document.getElementById('category-name');
 
+    //Expense Elements
     const expenseNameInput = document.getElementById('expense-name');
     const expenseAmountInput = document.getElementById('expense-amount');
     const expenseDateInput = document.getElementById('expense-date');
@@ -30,7 +33,10 @@ document.addEventListener('DOMContentLoaded', function() {
     let editingCategory = null;
     let editingExpense = null;
 
+
+    // Budget Section
     const savedBudget = localStorage.getItem('budget');
+    const SavedCurrency = localStorage.getItem('budget-currency');
     if (savedBudget) {
         totalBudgetSpan.textContent = savedBudget;
         budgetLeftSpan.textContent = savedBudget;
@@ -39,9 +45,11 @@ document.addEventListener('DOMContentLoaded', function() {
         budgetLeftSpan.textContent = '---';
     }
 
-    function updateBudget(amount) {
-        totalBudgetSpan.textContent = amount;
-        budgetLeftSpan.textContent = amount;
+    function updateBudget(amount,currency) {
+        totalBudgetSpan.textContent = (currency === 'dollars' ? '$' : '₡')+ amount;
+        budgetLeftSpan.textContent = (currency === 'dollars' ? '$' : '₡')+ amount;
+        localStorage.setItem('budget',amount);
+        localStorage.setItem('budget-currency',currency);
     }
 
     function validateInput(amount, currency) {
@@ -64,13 +72,16 @@ document.addEventListener('DOMContentLoaded', function() {
             if (validateInput(budgetAmount, currency)) {
                 localStorage.setItem('budget', budgetAmount);
                 localStorage.setItem('budget-currency', currency);
-                updateBudget(budgetAmount);
+                updateBudget(budgetAmount,currency);
                 budgetSubmitButton.textContent = 'Update Budget';
                 budgetAmountInput.value = '';
                 currencyInput.value = '';
             }
         });
     }
+
+
+    //Category Section
 
     function createCategoryRow(categoryName) {
         let row = document.createElement('tr');
@@ -182,6 +193,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+
+    // Expense Section
     function populateCategoryDropdown() {
         const categories = JSON.parse(localStorage.getItem('categories')) || [];
         if (categoryDropdown) {
@@ -206,10 +219,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
             });
         }
-        if (tableExpenseSumary){
-            createExpenseRowWithoutButtons(expense);
-        }
-
+        
         updateTotalExpensesAndBudgetLeft();
     }
 
@@ -251,39 +261,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
         tableExpense.appendChild(row);
     }
-
-    function createExpenseRowWithoutButtons(expense) {
-        let row = document.createElement('tr');
-        
-        let currencySymbol = expense.currency === 'dollars' ? '$' : '₡';
-        
-        row.innerHTML = `
-            <td>${expense.name}</td>
-            <td>${currencySymbol} ${expense.amount}</td>
-            <td>${currencySymbol}</td>
-            <td>${expense.category}</td>
-            <td>${expense.date}</td>
-        `;
-        
-        tableExpense.appendChild(row);
-    }
-    
-    function createExpenseRowWithoutButtons(expense) {
-        let row = document.createElement('tr');
-        
-        let currencySymbol = expense.currency === 'dollars' ? '$' : '₡';
-        
-        row.innerHTML = `
-            <td>${expense.name}</td>
-            <td>${currencySymbol} ${expense.amount}</td>
-            <td>${currencySymbol}</td>
-            <td>${expense.category}</td>
-            <td>${expense.date}</td>
-        `;
-        
-        tableExpense.appendChild(row);
-    }
-    
 
     function validateExpenseInput(amount, currency) {
         if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
@@ -360,6 +337,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const budgetAmount = parseFloat(totalBudgetSpan.textContent.replace(/[^\d.-]/g, '')) || 0;
         const budgetLeft = budgetAmount - totalExpense;
         budgetLeftSpan.textContent = (currency === 'dollars' ? '$' : '₡') + budgetLeft.toFixed(2);
+        totalBudgetSpan.textContent = (currency === 'dollars' ? '$' : '₡') + budgetAmount.toFixed(2);
+        localStorage.setItem('total-expenses',totalExpense.toFixed(2));
+        localStorage.setItem('budget-left',(budgetAmount).toFixed(2));
     }
 
     if (expenseSubmitButton) {

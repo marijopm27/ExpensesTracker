@@ -219,11 +219,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 
             });
         }
+        if (tableExpenseSumary){
+            tableExpenseSumary.innerHTML = '';
+            expenses.forEach(expense => {
+                createExpenseRowSumary(expense);
+                
+            });
+        }
         
         updateTotalExpensesAndBudgetLeft();
     }
 
     function createExpenseRow(expense) {
+            console.log('bye');
         let row = document.createElement('tr');
     
         let currencySymbol = expense.currency === 'dollars' ? '$' : '₡';
@@ -260,8 +268,27 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     
         tableExpense.appendChild(row);
+        
+        
+        
     }
 
+    function createExpenseRowSumary(expense){
+        
+        let row = document.createElement('tr');
+
+        let currencySymbol = expense.currency === 'dollars' ? '$' : '₡';
+
+        row.innerHTML = `
+            <td>${expense.name}</td>
+            <td>${currencySymbol} ${expense.amount}</td>
+            <td>${currencySymbol}</td>
+            <td>${expense.category}</td>
+            <td>${expense.date}</td>
+            
+        `;
+        tableExpenseSumary.appendChild(row);
+    }
     function validateExpenseInput(amount, currency) {
         if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
             showError('Please enter a valid expense amount.');

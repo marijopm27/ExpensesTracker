@@ -86,8 +86,12 @@ function createExpenseRowSumary(expense) {
     tableExpenseSumary.appendChild(row);
 }
 
-function validateExpenseInput(amount, currency, date, category) {
-    console.log('Validando entrada de gasto:', { amount, currency, date, category });
+function validateExpenseInput(name, amount, currency, date, category) {
+    console.log('Validando entrada de gasto:', { name, amount, currency, date, category });
+    if (!name.trim()) {
+        alert('Please enter a valid expense name.');
+        return false;
+    }
     if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
         alert('Please enter a valid expense amount.');
         return false;
@@ -180,7 +184,7 @@ function removeExpense(expenseToRemove) {
     );
     localStorage.setItem('expenses', JSON.stringify(expenses));
     updateTotalExpensesAndBudgetLeft();
-    loadExpenses(); // Re-load to ensure the UI is up-to-date
+    loadExpenses(); 
     
 }
 
@@ -193,7 +197,7 @@ if (expenseSubmitButton) {
         const currency = expenseCurrencyInput.value.toLowerCase();
         const category = categoryDropdown.value;
 
-        if (!validateExpenseInput(amount, currency, date, category)) {
+        if (!validateExpenseInput(name, amount, currency, date, category)) {
             return;
         }
 
@@ -206,13 +210,14 @@ if (expenseSubmitButton) {
                 date,
                 category
             };
+
             addExpense(updatedExpense);
-            // Elimina el gasto existente primero
+
+          
             removeExpense(editingExpense);
 
-            // Añade el gasto editado
-            
 
+            
             expenseSubmitButton.textContent = 'Add Expense';
             editingExpense = null;
         } else {

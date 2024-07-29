@@ -117,6 +117,7 @@ function updatePieChart(filteredExpenses) {
         }
     });
 }
+
 function validateInput(amount, currency, limit) {
     if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
         alert('Please enter a valid budget amount.');
@@ -128,6 +129,10 @@ function validateInput(amount, currency, limit) {
     }
     if (!limit || isNaN(limit) || parseFloat(limit) <= 0) {
         alert('Please enter a valid budget limit.');
+        return false;
+    }
+    if (parseFloat(limit) > parseFloat(amount)) {
+        alert('The budget limit cannot be greater than the budget amount.');
         return false;
     }
     return true;

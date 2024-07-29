@@ -77,6 +77,18 @@ function getAndDisplayLocalStorageValues() {
     budgetLimitSpan.textContent = currencySymbol + (parseFloat(localStorage.getItem('budget-limit')) || 0).toFixed(2);
 }
 
+document.getElementById('toggle-dark-mode').addEventListener('click', function() {
+    document.body.classList.toggle('dark-mode');
+    if (document.body.classList.contains('dark-mode')) {
+        localStorage.setItem('dark-mode', 'enabled');
+        document.getElementById('sun-icon').style.display = 'block';
+        document.getElementById('moon-icon').style.display = 'none';
+    } else {
+        localStorage.setItem('dark-mode', 'disabled');
+        document.getElementById('sun-icon').style.display = 'none';
+        document.getElementById('moon-icon').style.display = 'block';
+    }
+});
 
 // Document ready function
 document.addEventListener('DOMContentLoaded', function() {

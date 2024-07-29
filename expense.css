@@ -16,6 +16,7 @@
 }
 
 .expense input[type=text],
+.expense input[type=date],
 .expense select {
     width: 100%;
     padding: 0.75em;

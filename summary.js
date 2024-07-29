@@ -3,13 +3,17 @@ const savedCurrency = localStorage.getItem('budget-currency');
 const savedLimit = localStorage.getItem('budget-limit');
 const budgetAmountInput = document.getElementById('budget-amount');
 const currencyInput = document.getElementById('budget-currency');
-const budgetLimitInput = document.getElementById('budget-limit');
+const budgetLimitInput = document.getElementById('budget-limit-input');
 const budgetSubmitButton = document.getElementById('budget-submit-button');
 const totalBudgetSpan = document.getElementById('total-budget');
 const budgetLeftSpan = document.getElementById('budget-left');
 const budgetLimitSpan = document.getElementById('budget-limit');
 const totalExpenseSpan = document.getElementById('total-expenses');
 const tableExpenseSumary = document.getElementById('table-expense-sumary');
+
+const filterCategory = document.getElementById('filter-category');
+const filterDate = document.getElementById('filter-date');
+const applyFiltersButton = document.getElementById('apply-filters');
 
 
 if (savedBudget) {
@@ -29,7 +33,7 @@ function updateBudget(amount, currency, limit) {
     localStorage.setItem('budget-limit', limit);
 }
 
-let pieChart = null; // Variable para almacenar el gráfico actual
+let pieChart = null; 
 
 async function calculateCategoryTotals(expenses, savedCurrency) {
     const categoryTotals = {};
@@ -142,10 +146,6 @@ if (budgetSubmitButton) {
         }
     });
 }
-
-const filterCategory = document.getElementById('filter-category');
-const filterDate = document.getElementById('filter-date');
-const applyFiltersButton = document.getElementById('apply-filters');
 
 applyFiltersButton.addEventListener('click', () => {
     const selectedCategory = filterCategory.value;

@@ -176,6 +176,7 @@ function removeExpense(expenseToRemove) {
           expense.category === expenseToRemove.category)
     );
     localStorage.setItem('expenses', JSON.stringify(expenses));
+    updateTotalExpensesAndBudgetLeft();
     loadExpenses(); // Re-load to ensure the UI is up-to-date
     
 }

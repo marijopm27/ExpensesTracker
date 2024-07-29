@@ -24,10 +24,13 @@ function loadExpenses() {
         });
     }
     updatePieChart(expenses);
+    updateTotalExpensesAndBudgetLeft();
     getAndDisplayLocalStorageValues();
+    
 }
 
 function createExpenseRow(expense) {
+    console.log('Creando fila para el gasto:', expense);
     let row = document.createElement('tr');
 
     let currencySymbol = expense.currency === 'dollars' ? '$' : '₡';
@@ -46,6 +49,7 @@ function createExpenseRow(expense) {
 
     let editButton = row.querySelector('.edit');
     editButton.addEventListener('click', () => {
+        console.log('Editando gasto:', expense);
         editingExpense = expense;
         expenseNameInput.value = expense.name;
         expenseAmountInput.value = expense.amount;
@@ -58,6 +62,7 @@ function createExpenseRow(expense) {
     let deleteButton = row.querySelector('.delete');
     deleteButton.addEventListener('click', () => {
         if (confirm(`Are you sure you want to delete this expense?`)) {
+            console.log('Eliminando gasto:', expense);
             removeExpense(expense);
         }
     });
@@ -66,6 +71,7 @@ function createExpenseRow(expense) {
 }
 
 function createExpenseRowSumary(expense) {
+    console.log('Creando fila para el resumen del gasto:', expense);
     let row = document.createElement('tr');
 
     let currencySymbol = expense.currency === 'dollars' ? '$' : '₡';
@@ -73,9 +79,7 @@ function createExpenseRowSumary(expense) {
     row.innerHTML = `
         <td>${expense.name}</td>
         <td>${expense.category}</td>
-        
         <td>${currencySymbol}</td>
-        
         <td>${expense.date}</td>
         <td>${currencySymbol} ${expense.amount}</td>
     `;
@@ -83,6 +87,7 @@ function createExpenseRowSumary(expense) {
 }
 
 function validateExpenseInput(amount, currency, date, category) {
+    console.log('Validando entrada de gasto:', { amount, currency, date, category });
     if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
         alert('Please enter a valid expense amount.');
         return false;
@@ -103,6 +108,7 @@ function validateExpenseInput(amount, currency, date, category) {
 }
 
 async function validateExpenseLimit(amount, currency, date) {
+    console.log('Validando límite de gasto:', { amount, currency, date });
     const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
     const savedCurrency = localStorage.getItem('budget-currency') || 'dollars';
     const limit = parseFloat(localStorage.getItem('budget-limit')) || 0;
@@ -139,6 +145,7 @@ function convertAmount(amount, fromCurrency, toCurrency, exchangeRate) {
 }
 
 async function addExpense(expense) {
+    console.log('Añadiendo gasto:', expense);
     const isValid = await validateExpenseLimit(parseFloat(expense.amount), expense.currency, expense.date);
     if (!isValid) {
         return;
@@ -147,22 +154,35 @@ async function addExpense(expense) {
     const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
     expenses.push(expense);
     localStorage.setItem('expenses', JSON.stringify(expenses));
-    createExpenseRow(expense);
+    expenseNameInput.value = '';
+    expenseAmountInput.value = '';
+    expenseDateInput.value = '';
+    expenseCurrencyInput.value = '';
+    updateTotalExpensesAndBudgetLeft();
+    loadExpenses(); // Cargar gastos después de añadir
     updateTotalExpense(parseFloat(expense.amount), expense.currency);
     updateBudgetLeft(-parseFloat(expense.amount), expense.currency);
     updateTotalExpensesAndBudgetLeft();
 }
 
 function removeExpense(expenseToRemove) {
+    console.log('Eliminando gasto:', expenseToRemove);
     let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
-    expenses = expenses.filter(expense => !(expense.amount === expenseToRemove.amount && expense.date === expenseToRemove.date && expense.currency === expenseToRemove.currency && expense.category === expenseToRemove.category));
+    expenses = expenses.filter(expense =>
+        !(expense.name === expenseToRemove.name &&
+          expense.amount === expenseToRemove.amount &&
+          expense.date === expenseToRemove.date &&
+          expense.currency === expenseToRemove.currency &&
+          expense.category === expenseToRemove.category)
+    );
     localStorage.setItem('expenses', JSON.stringify(expenses));
-    updateTotalExpensesAndBudgetLeft();
     loadExpenses(); // Re-load to ensure the UI is up-to-date
+    
 }
 
 if (expenseSubmitButton) {
     expenseSubmitButton.addEventListener('click', async () => {
+        console.log('Botón de enviar clickeado.');
         const name = expenseNameInput.value.trim();
         const amount = parseFloat(expenseAmountInput.value);
         const date = expenseDateInput.value;
@@ -174,6 +194,7 @@ if (expenseSubmitButton) {
         }
 
         if (editingExpense) {
+            console.log('Editando gasto existente:', editingExpense);
             const updatedExpense = {
                 name,
                 amount,
@@ -181,11 +202,17 @@ if (expenseSubmitButton) {
                 date,
                 category
             };
-            await removeExpense(editingExpense);
-            await addExpense(updatedExpense);
+            addExpense(updatedExpense);
+            // Elimina el gasto existente primero
+            removeExpense(editingExpense);
+
+            // Añade el gasto editado
+            
+
             expenseSubmitButton.textContent = 'Add Expense';
             editingExpense = null;
         } else {
+            console.log('Añadiendo nuevo gasto:', { name, amount, currency, date, category });
             const newExpense = {
                 name,
                 amount,
@@ -196,6 +223,7 @@ if (expenseSubmitButton) {
             await addExpense(newExpense);
         }
 
+        // Limpiar campos de entrada
         expenseNameInput.value = '';
         expenseAmountInput.value = '';
         expenseDateInput.value = '';

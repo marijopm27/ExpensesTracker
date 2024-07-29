@@ -158,6 +158,9 @@ async function addExpense(expense) {
     expenseAmountInput.value = '';
     expenseDateInput.value = '';
     expenseCurrencyInput.value = '';
+    expenseSubmitButton.textContent = 'Add Expense';
+            editingExpense = null;
+
     updateTotalExpensesAndBudgetLeft();
     loadExpenses(); // Cargar gastos después de añadir
     updateTotalExpense(parseFloat(expense.amount), expense.currency);

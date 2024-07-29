@@ -1,4 +1,6 @@
 // Define global functions
+const exchangeRateCache = {};
+
 function updateTotalExpense(amount, currency) {
     const currentTotalExpense = parseFloat(totalExpenseSpan.textContent.replace(/[^\d.-]/g, '')) || 0;
     const newTotalExpense = currentTotalExpense + amount;
@@ -10,8 +12,6 @@ function updateBudgetLeft(amount, currency) {
     const newBudgetLeft = currentBudgetLeft + amount;
     budgetLeftSpan.textContent = (currency === 'dollars' ? '$' : '₡') + newBudgetLeft.toFixed(2);
 }
-
-const exchangeRateCache = {};
 
 async function fetchExchangeRate(date) {
     if (exchangeRateCache[date]) {
@@ -29,8 +29,8 @@ async function fetchExchangeRate(date) {
         return exchangeRate;
     } catch (error) {
         console.error(`Failed to fetch exchange rate for ${date}:`, error);
-        // Puedes usar una tasa de cambio predeterminada en caso de error
-        const defaultExchangeRate = 570; // Ejemplo de tasa de cambio predeterminada
+        
+        const defaultExchangeRate = 570; 
         return defaultExchangeRate;
     }
 }
@@ -76,29 +76,8 @@ function getAndDisplayLocalStorageValues() {
     totalExpenseSpan.textContent = currencySymbol + (parseFloat(localStorage.getItem('total-expenses')) || 0).toFixed(2);
     budgetLimitSpan.textContent = currencySymbol + (parseFloat(localStorage.getItem('budget-limit')) || 0).toFixed(2);
 }
-document.addEventListener('DOMContentLoaded', function() {
-    if (localStorage.getItem('dark-mode') === 'enabled') {
-        document.body.classList.add('dark-mode');
-        document.getElementById('sun-icon').style.display = 'block';
-        document.getElementById('moon-icon').style.display = 'none';
-    } else {
-        document.getElementById('sun-icon').style.display = 'none';
-        document.getElementById('moon-icon').style.display = 'block';
-    }
-});
 
-document.getElementById('toggle-dark-mode').addEventListener('click', function() {
-    document.body.classList.toggle('dark-mode');
-    if (document.body.classList.contains('dark-mode')) {
-        localStorage.setItem('dark-mode', 'enabled');
-        document.getElementById('sun-icon').style.display = 'block';
-        document.getElementById('moon-icon').style.display = 'none';
-    } else {
-        localStorage.setItem('dark-mode', 'disabled');
-        document.getElementById('sun-icon').style.display = 'none';
-        document.getElementById('moon-icon').style.display = 'block';
-    }
-});
+
 // Document ready function
 document.addEventListener('DOMContentLoaded', function() {
     const toggleMenu = document.querySelector('.toggle-menu');
@@ -119,9 +98,16 @@ document.addEventListener('DOMContentLoaded', function() {
             navbar.classList.toggle('active');
         });
     }
+
+    if (localStorage.getItem('dark-mode') === 'enabled') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('sun-icon').style.display = 'block';
+        document.getElementById('moon-icon').style.display = 'none';
+    } else {
+        document.getElementById('sun-icon').style.display = 'none';
+        document.getElementById('moon-icon').style.display = 'block';
+    }
     
-    
-    // Cargar categorías y gastos
     loadCategories();
     loadExpenses();
     
